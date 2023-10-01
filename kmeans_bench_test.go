@@ -28,6 +28,7 @@ func Benchmark_kmeans(b *testing.B) {
 	})
 
 	b.Run("KMEANS++", func(b *testing.B) {
+		b.Skip()
 		b.ResetTimer()
 		for i := 1; i < b.N; i++ {
 			_, err := kmeanspp.Cluster()

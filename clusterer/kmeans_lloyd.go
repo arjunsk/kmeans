@@ -33,6 +33,11 @@ func NewKmeans(vectors []domain.Vector, clusterCnt int) (Clusterer, error) {
 		return nil, err
 	}
 
+	err = validateArgs(clusterCnt, len(vectors))
+	if err != nil {
+		return nil, err
+	}
+
 	m.vectors = vectors
 	m.clusterCnt = clusterCnt
 
@@ -58,10 +63,6 @@ func newKmeansWithOptions(
 }
 
 func (ll Lloyd) Cluster() (domain.Clusters, error) {
-	err := StdInputCheck(ll.clusterCnt, len(ll.vectors))
-	if err != nil {
-		return nil, err
-	}
 
 	clusterGroup, err := ll.initializer.InitCentroids(ll.vectors, ll.clusterCnt)
 	if err != nil {
