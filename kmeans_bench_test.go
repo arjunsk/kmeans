@@ -2,7 +2,6 @@ package go_kmeans
 
 import (
 	"github.com/arjunsk/go-kmeans/clusterer"
-	"github.com/arjunsk/go-kmeans/containers"
 	"math/rand"
 	"testing"
 )
@@ -51,7 +50,7 @@ func Benchmark_kmeans(b *testing.B) {
 
 func loadData(nb int, d int, xb [][]float64) {
 	for r := 0; r < nb; r++ {
-		xb[r] = make(containers.Vector, d)
+		xb[r] = make([]float64, d)
 		for c := 0; c < d; c++ {
 			xb[r][c] = float64(rand.Float32() * 1000)
 		}

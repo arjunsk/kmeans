@@ -10,7 +10,7 @@ import (
 // Hence, using Skipf instead of Errorf.
 func TestKmeansPlusPlus_InitCentroids(t *testing.T) {
 	type args struct {
-		vectors    []containers.Vector
+		vectors    [][]float64
 		clusterCnt int
 	}
 	tests := []struct {
@@ -23,7 +23,7 @@ func TestKmeansPlusPlus_InitCentroids(t *testing.T) {
 		{
 			name: "Test1",
 			args: args{
-				vectors: []containers.Vector{
+				vectors: [][]float64{
 					{1, 2, 3, 4}, {0, 3, 4, 1},
 					{130, 200, 343, 224}, {100, 200, 300, 400},
 				},
