@@ -1,4 +1,4 @@
-package domain
+package containers
 
 type Vector []float64
 

@@ -2,7 +2,7 @@ package clusterer
 
 import (
 	"errors"
-	"github.com/arjunsk/go-kmeans/domain"
+	"github.com/arjunsk/go-kmeans/containers"
 	"github.com/arjunsk/go-kmeans/initializer"
 	"math"
 	"sync"
@@ -13,7 +13,7 @@ type KmeansElkan struct {
 	deltaThreshold     float64
 	iterationThreshold int
 
-	distFn      domain.DistanceFunction
+	distFn      containers.DistanceFunction
 	initializer initializer.Initializer
 
 	assignments []int
@@ -22,17 +22,17 @@ type KmeansElkan struct {
 	r           []bool
 
 	// local state
-	vectors    []domain.Vector
+	vectors    []containers.Vector
 	clusterCnt int
 }
 
 var _ Clusterer = new(KmeansElkan)
 
-func NewKmeansElkan(vectors []domain.Vector, clusterCnt int) (Clusterer, error) {
+func NewKmeansElkan(vectors []containers.Vector, clusterCnt int) (Clusterer, error) {
 	el, err := newKmeansElkanWithOptions(
 		0.01,
 		500,
-		domain.EuclideanDistance,
+		containers.EuclideanDistance,
 		initializer.NewKmeansInitializer())
 
 	if err != nil {
@@ -62,7 +62,7 @@ func NewKmeansElkan(vectors []domain.Vector, clusterCnt int) (Clusterer, error) 
 func newKmeansElkanWithOptions(
 	deltaThreshold float64,
 	iterationThreshold int,
-	distFn domain.DistanceFunction,
+	distFn containers.DistanceFunction,
 	init initializer.Initializer) (KmeansElkan, error) {
 
 	if deltaThreshold <= 0.0 || deltaThreshold >= 1.0 {
@@ -77,7 +77,7 @@ func newKmeansElkanWithOptions(
 	}, nil
 }
 
-func (el *KmeansElkan) Cluster() (domain.Clusters, error) {
+func (el *KmeansElkan) Cluster() (containers.Clusters, error) {
 
 	clusterGroup, err := el.initializer.InitCentroids(el.vectors, el.clusterCnt)
 	if err != nil {
@@ -93,7 +93,7 @@ func (el *KmeansElkan) Cluster() (domain.Clusters, error) {
 }
 
 // kmeansElkan Complexity := closer to O(n); n = number of vectors
-func (el *KmeansElkan) kmeansElkan(clusterGroup domain.Clusters) (err error) {
+func (el *KmeansElkan) kmeansElkan(clusterGroup containers.Clusters) (err error) {
 	for i := 0; ; i++ {
 		movement := 0
 		clusterGroup.Reset()
@@ -124,7 +124,7 @@ func (el *KmeansElkan) kmeansElkan(clusterGroup domain.Clusters) (err error) {
 	return nil
 }
 
-func (el *KmeansElkan) calculateCentroidDistances(clusters domain.Clusters, k int) [][]float64 {
+func (el *KmeansElkan) calculateCentroidDistances(clusters containers.Clusters, k int) [][]float64 {
 	centroidDistances := make([][]float64, k)
 	for i := 0; i < k; i++ {
 		centroidDistances[i] = make([]float64, k)
@@ -165,8 +165,8 @@ func (el *KmeansElkan) computeSc(centroidDistances [][]float64, k int) []float64
 
 func (el *KmeansElkan) assignData(centroidDistances [][]float64,
 	sc []float64,
-	clusters domain.Clusters,
-	vectors []domain.Vector,
+	clusters containers.Clusters,
+	vectors []containers.Vector,
 	iterationCount int) (int, error) {
 
 	moves := 0
@@ -225,7 +225,7 @@ func (el *KmeansElkan) assignData(centroidDistances [][]float64,
 	return moves, nil
 }
 
-func (el *KmeansElkan) updateBounds(moveDistances []float64, data []domain.Vector) {
+func (el *KmeansElkan) updateBounds(moveDistances []float64, data []containers.Vector) {
 	k := len(moveDistances)
 
 	for x := range data {

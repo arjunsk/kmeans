@@ -2,16 +2,16 @@ package clusterer
 
 import (
 	"errors"
-	"github.com/arjunsk/go-kmeans/domain"
+	"github.com/arjunsk/go-kmeans/containers"
 	"sync"
 	"sync/atomic"
 )
 
 type Clusterer interface {
-	Cluster() (domain.Clusters, error)
+	Cluster() (containers.Clusters, error)
 }
 
-func validateArgs(vectors []domain.Vector, clusterCnt int) error {
+func validateArgs(vectors []containers.Vector, clusterCnt int) error {
 	if len(vectors) == 0 {
 		return errors.New("kmeans: The data set must not be empty")
 	}
