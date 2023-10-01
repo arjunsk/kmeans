@@ -33,8 +33,13 @@ func NewKmeansElkan(vectors []domain.Vector, clusterCnt int) (Clusterer, error) 
 		0.01,
 		500,
 		domain.EuclideanDistance,
-		initializer.NewKmeansPlusPlusInitializer(domain.EuclideanDistance))
+		initializer.NewKmeansInitializer())
 
+	if err != nil {
+		return nil, err
+	}
+
+	err = validateArgs(clusterCnt, len(vectors))
 	if err != nil {
 		return nil, err
 	}
@@ -43,13 +48,13 @@ func NewKmeansElkan(vectors []domain.Vector, clusterCnt int) (Clusterer, error) 
 	el.clusterCnt = clusterCnt
 
 	n := len(vectors)
+	el.r = make([]bool, n)
 	el.assignments = make([]int, n)
 	el.upperBounds = make([]float64, n)
 	el.lowerBounds = make([][]float64, n)
 	for i := range el.lowerBounds {
-		el.lowerBounds[i] = make([]float64, el.clusterCnt)
+		el.lowerBounds[i] = make([]float64, clusterCnt)
 	}
-	el.r = make([]bool, n)
 
 	return &el, nil
 }
@@ -73,10 +78,6 @@ func newKmeansElkanWithOptions(
 }
 
 func (el *KmeansElkan) Cluster() (domain.Clusters, error) {
-	err := StdInputCheck(el.clusterCnt, len(el.vectors))
-	if err != nil {
-		return nil, err
-	}
 
 	clusterGroup, err := el.initializer.InitCentroids(el.vectors, el.clusterCnt)
 	if err != nil {
