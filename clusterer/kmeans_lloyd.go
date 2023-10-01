@@ -33,7 +33,7 @@ func NewKmeans(vectors []domain.Vector, clusterCnt int) (Clusterer, error) {
 		return nil, err
 	}
 
-	err = validateArgs(clusterCnt, len(vectors))
+	err = validateArgs(vectors, clusterCnt)
 	if err != nil {
 		return nil, err
 	}
