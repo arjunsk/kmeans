@@ -11,7 +11,7 @@ type KmeansPP struct {
 
 var _ Clusterer = new(KmeansPP)
 
-func NewKmeansPlusPlus(vectors []containers.Vector, clusterCnt int) (Clusterer, error) {
+func NewKmeansPlusPlus(vectors [][]float64, clusterCnt int) (Clusterer, error) {
 
 	clusterer, err := newKmeansWithOptions(
 		0.01,

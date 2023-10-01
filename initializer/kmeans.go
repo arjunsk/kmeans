@@ -12,7 +12,7 @@ func NewKmeansInitializer() Initializer {
 	return &Kmeans{}
 }
 
-func (k *Kmeans) InitCentroids(vectors []containers.Vector, clusterCnt int) (containers.Clusters, error) {
+func (k *Kmeans) InitCentroids(vectors [][]float64, clusterCnt int) (containers.Clusters, error) {
 	inputCnt := len(vectors)
 
 	err := StdInputChecks(vectors, clusterCnt, inputCnt)

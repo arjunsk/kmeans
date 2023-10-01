@@ -3,11 +3,10 @@ package go_kmeans
 import (
 	"fmt"
 	"github.com/arjunsk/go-kmeans/clusterer"
-	"github.com/arjunsk/go-kmeans/containers"
 	"testing"
 )
 
-var vectors = []containers.Vector{
+var vectors = [][]float64{
 	{20.0, 20.0, 20.0, 20.0},
 	{21.0, 21.0, 21.0, 21.0},
 	{100.5, 100.5, 100.5, 100.5},
