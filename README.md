@@ -28,14 +28,18 @@ func main() {
 		panic(err)
 	}
 
-	clusterGroup, err := kmeans.Cluster()
+	clusters, err := kmeans.Cluster()
 	if err != nil {
 		panic(err)
 	}
 
-	for _, cluster := range clusterGroup {
+	for _, cluster := range clusters {
 		fmt.Println(cluster.Center)
 	}
+	// Output:
+	// [1 2 3 4]
+	// [130 200 343 224]
+
 }
 
 ```
