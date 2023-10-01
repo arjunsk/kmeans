@@ -2,16 +2,16 @@ package initializer
 
 import (
 	"errors"
-	"github.com/arjunsk/go-kmeans/domain"
+	"github.com/arjunsk/go-kmeans/containers"
 	"math/rand"
 	"sync"
 )
 
 type KmeansPlusPlus struct {
-	DistFn domain.DistanceFunction
+	DistFn containers.DistanceFunction
 }
 
-func NewKmeansPlusPlusInitializer(distFn domain.DistanceFunction) Initializer {
+func NewKmeansPlusPlusInitializer(distFn containers.DistanceFunction) Initializer {
 	return &KmeansPlusPlus{
 		DistFn: distFn,
 	}
@@ -19,7 +19,7 @@ func NewKmeansPlusPlusInitializer(distFn domain.DistanceFunction) Initializer {
 
 // InitCentroids initializes the centroids using kmeans++ algorithm
 // Ref: https://www.youtube.com/watch?v=HatwtJSsj5Q
-func (kpp *KmeansPlusPlus) InitCentroids(vectors []domain.Vector, clusterCnt int) (clusters domain.Clusters, err error) {
+func (kpp *KmeansPlusPlus) InitCentroids(vectors []containers.Vector, clusterCnt int) (clusters containers.Clusters, err error) {
 	inputCnt := len(vectors)
 
 	err = StdInputChecks(vectors, clusterCnt, inputCnt)
@@ -31,11 +31,11 @@ func (kpp *KmeansPlusPlus) InitCentroids(vectors []domain.Vector, clusterCnt int
 		return nil, errors.New("KMeans: distance function cannot be nil")
 	}
 
-	clusters = make([]domain.Cluster, clusterCnt)
+	clusters = make([]containers.Cluster, clusterCnt)
 
 	// 1. start with a random center
 	randIdx := rand.Intn(len(vectors))
-	clusters[0] = domain.Cluster{
+	clusters[0] = containers.Cluster{
 		Center: vectors[randIdx],
 	}
 
@@ -71,7 +71,7 @@ func (kpp *KmeansPlusPlus) InitCentroids(vectors []domain.Vector, clusterCnt int
 
 			// Select a cluster center based on a probability distribution where vectors
 			//	with larger distances have a higher chance of being chosen as the center.
-			clusters[i] = domain.Cluster{Center: vectors[nextClusterCenterIdx]}
+			clusters[i] = containers.Cluster{Center: vectors[nextClusterCenterIdx]}
 		})(i)
 
 	}

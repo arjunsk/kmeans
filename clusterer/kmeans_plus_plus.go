@@ -1,7 +1,7 @@
 package clusterer
 
 import (
-	"github.com/arjunsk/go-kmeans/domain"
+	"github.com/arjunsk/go-kmeans/containers"
 	"github.com/arjunsk/go-kmeans/initializer"
 )
 
@@ -11,13 +11,13 @@ type KmeansPP struct {
 
 var _ Clusterer = new(KmeansPP)
 
-func NewKmeansPlusPlus(vectors []domain.Vector, clusterCnt int) (Clusterer, error) {
+func NewKmeansPlusPlus(vectors []containers.Vector, clusterCnt int) (Clusterer, error) {
 
 	clusterer, err := newKmeansWithOptions(
 		0.01,
 		500,
-		domain.EuclideanDistance,
-		initializer.NewKmeansPlusPlusInitializer(domain.EuclideanDistance))
+		containers.EuclideanDistance,
+		initializer.NewKmeansPlusPlusInitializer(containers.EuclideanDistance))
 	if err != nil {
 		return nil, err
 	}

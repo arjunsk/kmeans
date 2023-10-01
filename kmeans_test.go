@@ -3,11 +3,11 @@ package go_clustering
 import (
 	"fmt"
 	"github.com/arjunsk/go-kmeans/clusterer"
-	"github.com/arjunsk/go-kmeans/domain"
+	"github.com/arjunsk/go-kmeans/containers"
 	"testing"
 )
 
-var vectors = []domain.Vector{
+var vectors = []containers.Vector{
 	{20.0, 20.0, 20.0, 20.0},
 	{21.0, 21.0, 21.0, 21.0},
 	{100.5, 100.5, 100.5, 100.5},

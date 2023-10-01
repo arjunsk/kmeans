@@ -1,7 +1,7 @@
 package initializer
 
 import (
-	"github.com/arjunsk/go-kmeans/domain"
+	"github.com/arjunsk/go-kmeans/containers"
 	"reflect"
 	"testing"
 )
@@ -10,45 +10,45 @@ import (
 // Hence, using Skipf instead of Errorf.
 func TestKmeansPlusPlus_InitCentroids(t *testing.T) {
 	type args struct {
-		vectors    []domain.Vector
+		vectors    []containers.Vector
 		clusterCnt int
 	}
 	tests := []struct {
 		name              string
 		args              args
-		wantPossibilities []domain.Clusters
+		wantPossibilities []containers.Clusters
 		wantErr           bool
-		distFn            domain.DistanceFunction
+		distFn            containers.DistanceFunction
 	}{
 		{
 			name: "Test1",
 			args: args{
-				vectors: []domain.Vector{
+				vectors: []containers.Vector{
 					{1, 2, 3, 4}, {0, 3, 4, 1},
 					{130, 200, 343, 224}, {100, 200, 300, 400},
 				},
 				clusterCnt: 2,
 			},
-			wantPossibilities: []domain.Clusters{
+			wantPossibilities: []containers.Clusters{
 				{
-					{Center: domain.Vector{1, 2, 3, 4}},
-					{Center: domain.Vector{100, 200, 300, 400}},
+					{Center: containers.Vector{1, 2, 3, 4}},
+					{Center: containers.Vector{100, 200, 300, 400}},
 				},
 				{
-					{Center: domain.Vector{1, 2, 3, 4}},
-					{Center: domain.Vector{130, 200, 343, 224}},
+					{Center: containers.Vector{1, 2, 3, 4}},
+					{Center: containers.Vector{130, 200, 343, 224}},
 				},
 				{
-					{Center: domain.Vector{0, 3, 4, 1}},
-					{Center: domain.Vector{100, 200, 300, 400}},
+					{Center: containers.Vector{0, 3, 4, 1}},
+					{Center: containers.Vector{100, 200, 300, 400}},
 				},
 				{
-					{Center: domain.Vector{0, 3, 4, 1}},
-					{Center: domain.Vector{130, 200, 343, 224}},
+					{Center: containers.Vector{0, 3, 4, 1}},
+					{Center: containers.Vector{130, 200, 343, 224}},
 				},
 			},
 			wantErr: false,
-			distFn:  domain.EuclideanDistance,
+			distFn:  containers.EuclideanDistance,
 		},
 	}
 	for _, tt := range tests {

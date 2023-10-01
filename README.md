@@ -12,7 +12,7 @@ package main
 import (
 	"fmt"
 	"github.com/arjunsk/go-kmeans/clusterer"
-	"github.com/arjunsk/go-kmeans/domain"
+	"github.com/arjunsk/go-kmeans/containers"
 )
 
 func main() {

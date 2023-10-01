@@ -3,11 +3,11 @@ package main
 import (
 	"fmt"
 	"github.com/arjunsk/go-kmeans/clusterer"
-	"github.com/arjunsk/go-kmeans/domain"
+	"github.com/arjunsk/go-kmeans/containers"
 )
 
 func main() {
-	vectors := []domain.Vector{
+	vectors := []containers.Vector{
 		{1, 2, 3, 4},
 		{0, 3, 4, 1},
 		{130, 200, 343, 224},

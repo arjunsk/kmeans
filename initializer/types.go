@@ -2,14 +2,14 @@ package initializer
 
 import (
 	"errors"
-	"github.com/arjunsk/go-kmeans/domain"
+	"github.com/arjunsk/go-kmeans/containers"
 )
 
 type Initializer interface {
-	InitCentroids(vectors []domain.Vector, clusterCnt int) (domain.Clusters, error)
+	InitCentroids(vectors []containers.Vector, clusterCnt int) (containers.Clusters, error)
 }
 
-func StdInputChecks(vectors []domain.Vector, clusterCnt int, inputCnt int) error {
+func StdInputChecks(vectors []containers.Vector, clusterCnt int, inputCnt int) error {
 	if vectors == nil || len(vectors[0]) == 0 {
 		return errors.New("KMeans: data cannot be nil")
 	}
