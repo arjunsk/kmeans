@@ -1,8 +1,8 @@
 package go_clustering
 
 import (
-	"go-kmeans/clusterer"
-	"go-kmeans/domain"
+	"github.com/arjunsk/go-kmeans/clusterer"
+	"github.com/arjunsk/go-kmeans/domain"
 	"math/rand"
 	"testing"
 )

@@ -2,7 +2,7 @@ package clusterer
 
 import (
 	"errors"
-	"go-kmeans/domain"
+	"github.com/arjunsk/go-kmeans/domain"
 )
 
 type Clusterer interface {

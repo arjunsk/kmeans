@@ -2,8 +2,8 @@ package go_clustering
 
 import (
 	"fmt"
-	"go-kmeans/clusterer"
-	"go-kmeans/domain"
+	"github.com/arjunsk/go-kmeans/clusterer"
+	"github.com/arjunsk/go-kmeans/domain"
 	"testing"
 )
 
