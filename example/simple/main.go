@@ -9,8 +9,11 @@ func main() {
 	vectors := [][]float64{
 		{1, 2, 3, 4},
 		{0, 3, 4, 1},
+		{0, 9, 3, 1},
+		{0, 8, 4, 4},
 		{130, 200, 343, 224},
 		{100, 200, 300, 400},
+		{300, 400, 200, 110},
 	}
 
 	kmeans, err := clusterer.NewKmeansElkan(vectors, 2)
