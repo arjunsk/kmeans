@@ -1,8 +1,8 @@
 package clusterer
 
 import (
-	"go-kmeans/domain"
-	"go-kmeans/initializer"
+	"github.com/arjunsk/go-kmeans/domain"
+	"github.com/arjunsk/go-kmeans/initializer"
 )
 
 type KmeansPP struct {

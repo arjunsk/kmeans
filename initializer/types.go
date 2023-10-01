@@ -2,7 +2,7 @@ package initializer
 
 import (
 	"errors"
-	"go-kmeans/domain"
+	"github.com/arjunsk/go-kmeans/domain"
 )
 
 type Initializer interface {

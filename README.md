@@ -29,6 +29,4 @@ func main() {
         fmt.Println(cluster.Center)
     }
 }
-
-
 ```

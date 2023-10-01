@@ -1,7 +1,7 @@
 package initializer
 
 import (
-	"go-kmeans/domain"
+	"github.com/arjunsk/go-kmeans/domain"
 	"reflect"
 	"testing"
 )
