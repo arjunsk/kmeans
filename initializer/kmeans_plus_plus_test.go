@@ -75,7 +75,7 @@ func TestKmeansPlusPlus_InitCentroids(t *testing.T) {
 			}
 
 			if !oneMatched {
-				t.Skipf("Kmeans++ initializer returned bad centers [A Rare Occurance]."+
+				t.Logf("Kmeans++ initializer returned bad centers [A Rare Occurance]."+
 					"Got = %v, want = %v", got, tt.wantPossibilities)
 			}
 		})
