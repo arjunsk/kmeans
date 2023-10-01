@@ -74,7 +74,7 @@ func TestKmeans_InitCentroids(t *testing.T) {
 			}
 
 			if !oneMatched {
-				t.Skipf("Kmeans initializer returned bad centers [Expected Behaviour]."+
+				t.Logf("Kmeans initializer returned bad centers [Expected Behaviour]."+
 					"Got = %v, want = %v", got, tt.wantPossibilities)
 			}
 		})

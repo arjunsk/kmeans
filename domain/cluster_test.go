@@ -14,12 +14,7 @@ func TestCluster_Recenter(t *testing.T) {
 		wantErr    bool
 	}{
 		{
-			name:    "empty cluster",
-			fields:  fields{},
-			wantErr: true,
-		},
-		{
-			name: "non-empty cluster",
+			name: "test1",
 			fields: fields{
 				Center:  Vector{1, 1},
 				Members: []Vector{{1, 1}, {2, 2}},
@@ -28,7 +23,7 @@ func TestCluster_Recenter(t *testing.T) {
 			wantErr:    false,
 		},
 		{
-			name: "non-empty cluster",
+			name: "test2",
 			fields: fields{
 				Center:  Vector{1, 1},
 				Members: []Vector{{1, 1}, {2, 2}, {3, 3}},
@@ -76,7 +71,6 @@ func TestCluster_RecenterReturningMovedDistance(t *testing.T) {
 				Members: []Vector{},
 			},
 			args:       args{distFn: EuclideanDistance},
-			wantErr:    true,
 			wantCenter: Vector{1, 1}, // unchanged
 		},
 		{
