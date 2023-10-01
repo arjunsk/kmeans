@@ -1,4 +1,4 @@
-package go_clustering
+package go_kmeans
 
 import (
 	"github.com/arjunsk/go-kmeans/clusterer"
