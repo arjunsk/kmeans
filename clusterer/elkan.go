@@ -22,13 +22,13 @@ type KmeansElkan struct {
 	r           []bool
 
 	// local state
-	vectors    []containers.Vector
+	vectors    [][]float64
 	clusterCnt int
 }
 
 var _ Clusterer = new(KmeansElkan)
 
-func NewKmeansElkan(vectors []containers.Vector, clusterCnt int) (Clusterer, error) {
+func NewKmeansElkan(vectors [][]float64, clusterCnt int) (Clusterer, error) {
 	el, err := newKmeansElkanWithOptions(
 		0.01,
 		500,
@@ -166,7 +166,7 @@ func (el *KmeansElkan) computeSc(centroidDistances [][]float64, k int) []float64
 func (el *KmeansElkan) assignData(centroidDistances [][]float64,
 	sc []float64,
 	clusters containers.Clusters,
-	vectors []containers.Vector,
+	vectors [][]float64,
 	iterationCount int) (int, error) {
 
 	moves := 0
@@ -225,7 +225,7 @@ func (el *KmeansElkan) assignData(centroidDistances [][]float64,
 	return moves, nil
 }
 
-func (el *KmeansElkan) updateBounds(moveDistances []float64, data []containers.Vector) {
+func (el *KmeansElkan) updateBounds(moveDistances []float64, data [][]float64) {
 	k := len(moveDistances)
 
 	for x := range data {

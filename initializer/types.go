@@ -6,10 +6,10 @@ import (
 )
 
 type Initializer interface {
-	InitCentroids(vectors []containers.Vector, clusterCnt int) (containers.Clusters, error)
+	InitCentroids(vectors [][]float64, clusterCnt int) (containers.Clusters, error)
 }
 
-func StdInputChecks(vectors []containers.Vector, clusterCnt int, inputCnt int) error {
+func StdInputChecks(vectors [][]float64, clusterCnt int, inputCnt int) error {
 	if vectors == nil || len(vectors[0]) == 0 {
 		return errors.New("KMeans: data cannot be nil")
 	}

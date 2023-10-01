@@ -15,13 +15,13 @@ type Lloyd struct {
 	initializer initializer.Initializer
 
 	// local state
-	vectors    []containers.Vector
+	vectors    [][]float64
 	clusterCnt int
 }
 
 var _ Clusterer = new(Lloyd)
 
-func NewKmeans(vectors []containers.Vector, clusterCnt int) (Clusterer, error) {
+func NewKmeans(vectors [][]float64, clusterCnt int) (Clusterer, error) {
 	// Iteration count: 500 Ref: https://github.com/pgvector/pgvector/blob/8d7abb659070259e78f5c0974dde26c9e1cda8d3/src/ivfkmeans.c#L261
 	// delta threshold:0.01 Ref:https://github.com/muesli/kmeans/blob/06e72b51dbf15ea9e20146451e2c523389633707/kmeans.go#L44
 	m, err := newKmeansWithOptions(
@@ -127,7 +127,7 @@ func (ll Lloyd) kmeans(clusterGroup containers.Clusters) (err error) {
 	return nil
 }
 
-func (ll Lloyd) assignData(vectors []containers.Vector, clusterGroup containers.Clusters, clusterIds []int, movement int) (int, error) {
+func (ll Lloyd) assignData(vectors [][]float64, clusterGroup containers.Clusters, clusterIds []int, movement int) (int, error) {
 	// 2. Assign each vector to the nearest cluster
 	for vecIdx, vec := range vectors {
 		clusterId, _, err := clusterGroup.Nearest(vec, ll.distFn)

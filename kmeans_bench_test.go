@@ -10,7 +10,7 @@ import (
 func Benchmark_kmeans(b *testing.B) {
 	rowCnt := 1_000
 	dims := 1024
-	data := make([]containers.Vector, rowCnt)
+	data := make([][]float64, rowCnt)
 	loadData(rowCnt, dims, data)
 
 	kmeans, _ := clusterer.NewKmeans(data, 100)
@@ -49,7 +49,7 @@ func Benchmark_kmeans(b *testing.B) {
 	})
 }
 
-func loadData(nb int, d int, xb []containers.Vector) {
+func loadData(nb int, d int, xb [][]float64) {
 	for r := 0; r < nb; r++ {
 		xb[r] = make(containers.Vector, d)
 		for c := 0; c < d; c++ {
