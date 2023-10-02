@@ -17,11 +17,11 @@ func TestClusters_Recenter(t *testing.T) {
 			c: Clusters{
 				Cluster{
 					center:  Vector{1, 1},
-					Members: []Vector{{1, 1}, {2, 2}, {3, 3}},
+					members: []Vector{{1, 1}, {2, 2}, {3, 3}},
 				},
 				Cluster{
 					center:  Vector{1, 1},
-					Members: []Vector{{1, 1}, {2, 2}},
+					members: []Vector{{1, 1}, {2, 2}},
 				},
 			},
 			wantErr: false,
@@ -62,11 +62,11 @@ func TestClusters_RecenterWithDeltaDistance(t *testing.T) {
 			c: Clusters{
 				Cluster{
 					center:  Vector{1, 1},
-					Members: []Vector{{1, 1}, {2, 2}, {3, 3}},
+					members: []Vector{{1, 1}, {2, 2}, {3, 3}},
 				},
 				Cluster{
 					center:  Vector{1, 1},
-					Members: []Vector{{1, 1}, {2, 2}},
+					members: []Vector{{1, 1}, {2, 2}},
 				},
 			},
 			wantErr: false,
@@ -112,11 +112,11 @@ func TestClusters_Reset(t *testing.T) {
 			c: Clusters{
 				Cluster{
 					center:  Vector{1, 1},
-					Members: []Vector{{1, 1}, {2, 2}, {3, 3}},
+					members: []Vector{{1, 1}, {2, 2}, {3, 3}},
 				},
 				Cluster{
 					center:  Vector{2, 2},
-					Members: []Vector{{1, 1}, {2, 2}, {3, 3}},
+					members: []Vector{{1, 1}, {2, 2}, {3, 3}},
 				},
 			},
 		},
@@ -125,8 +125,8 @@ func TestClusters_Reset(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.c.Reset()
 			for _, cluster := range tt.c {
-				if len(cluster.Members) != 0 {
-					t.Errorf("Clusters.Reset() = %v, want %v", cluster.Members, []Vector{})
+				if len(cluster.members) != 0 {
+					t.Errorf("Clusters.Reset() = %v, want %v", cluster.members, []Vector{})
 				}
 				if cluster.center.Compare(Vector{}) == 0 {
 					// If center is cleared, then there is a problem.
@@ -155,11 +155,11 @@ func TestClusters_Nearest(t *testing.T) {
 			c: Clusters{
 				Cluster{
 					center:  Vector{1, 1},
-					Members: []Vector{{1, 1}, {2, 2}, {3, 3}},
+					members: []Vector{{1, 1}, {2, 2}, {3, 3}},
 				},
 				Cluster{
 					center:  Vector{2, 2},
-					Members: []Vector{{1, 1}, {2, 2}, {3, 3}},
+					members: []Vector{{1, 1}, {2, 2}, {3, 3}},
 				},
 			},
 			args: args{
@@ -175,11 +175,11 @@ func TestClusters_Nearest(t *testing.T) {
 			c: Clusters{
 				Cluster{
 					center:  Vector{1, 1},
-					Members: []Vector{{1, 1}, {2, 2}, {3, 3}},
+					members: []Vector{{1, 1}, {2, 2}, {3, 3}},
 				},
 				Cluster{
 					center:  Vector{2, 2},
-					Members: []Vector{{1, 1}, {2, 2}, {3, 3}},
+					members: []Vector{{1, 1}, {2, 2}, {3, 3}},
 				},
 			},
 			args: args{

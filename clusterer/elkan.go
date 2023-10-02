@@ -218,7 +218,7 @@ func (el *KmeansElkan) assignData(centroidDistances [][]float64,
 			moves++
 		}
 
-		clusters[meanIndex].Add(vectors[x])
+		clusters[meanIndex].AddMember(vectors[x])
 	}
 	return moves, nil
 }

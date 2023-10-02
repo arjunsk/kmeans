@@ -38,7 +38,7 @@ func TestCluster_Recenter(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			c := &Cluster{
 				center:  tt.fields.Center,
-				Members: tt.fields.Members,
+				members: tt.fields.Members,
 			}
 			if err := c.Recenter(); (err != nil) != tt.wantErr {
 				t.Errorf("Recenter() error = %v, wantErr %v", err, tt.wantErr)
@@ -90,7 +90,7 @@ func TestCluster_RecenterReturningMovedDistance(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			c := &Cluster{
 				center:  tt.fields.Center,
-				Members: tt.fields.Members,
+				members: tt.fields.Members,
 			}
 			gotMoveDistances, err := c.RecenterReturningMovedDistance(tt.args.distFn)
 			if (err != nil) != tt.wantErr {
@@ -128,11 +128,11 @@ func TestCluster_Reset(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			c := &Cluster{
 				center:  tt.fields.Center,
-				Members: tt.fields.Members,
+				members: tt.fields.Members,
 			}
 			c.Reset()
-			if len(c.Members) != 0 {
-				t.Errorf("Reset() = %v, want %v", c.Members, []Vector{})
+			if len(c.members) != 0 {
+				t.Errorf("Reset() = %v, want %v", c.members, []Vector{})
 			}
 			if c.center.Compare(tt.fields.Center) != 0 {
 				t.Errorf("Reset() = %v, want %v", c.center, tt.fields.Center)
