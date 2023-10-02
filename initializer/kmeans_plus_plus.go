@@ -20,9 +20,7 @@ func NewKmeansPlusPlusInitializer(distFn containers.DistanceFunction) Initialize
 // InitCentroids initializes the centroids using kmeans++ algorithm
 // Ref: https://www.youtube.com/watch?v=HatwtJSsj5Q
 func (kpp *KmeansPlusPlus) InitCentroids(vectors [][]float64, clusterCnt int) (clusters containers.Clusters, err error) {
-	inputCnt := len(vectors)
-
-	err = StdInputChecks(vectors, clusterCnt, inputCnt)
+	err = validateArgs(vectors, clusterCnt)
 	if err != nil {
 		return nil, err
 	}

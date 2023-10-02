@@ -53,7 +53,7 @@ func TestKmeans_InitCentroids(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			k := &Kmeans{}
+			k := NewRandomInitializer()
 			got, err := k.InitCentroids(tt.args.vectors, tt.args.clusterCnt)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("InitCentroids() error = %v, wantErr %v", err, tt.wantErr)

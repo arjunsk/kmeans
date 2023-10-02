@@ -35,7 +35,7 @@ func NewKmeans(vectors [][]float64, clusterCnt int) (Clusterer, error) {
 		deltaThreshold,
 		iterationThreshold,
 		containers.EuclideanDistance,
-		initializer.NewKmeansInitializer())
+		initializer.NewRandomInitializer())
 	if err != nil {
 		return nil, err
 	}

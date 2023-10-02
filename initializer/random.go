@@ -6,20 +6,19 @@ import (
 	"time"
 )
 
-type Kmeans struct{}
+type Random struct{}
 
-func NewKmeansInitializer() Initializer {
-	return &Kmeans{}
+func NewRandomInitializer() Initializer {
+	return &Random{}
 }
 
-func (k *Kmeans) InitCentroids(vectors [][]float64, clusterCnt int) (containers.Clusters, error) {
-	inputCnt := len(vectors)
-
-	err := StdInputChecks(vectors, clusterCnt, inputCnt)
+func (k *Random) InitCentroids(vectors [][]float64, clusterCnt int) (containers.Clusters, error) {
+	err := validateArgs(vectors, clusterCnt)
 	if err != nil {
 		return nil, err
 	}
 
+	inputCnt := len(vectors)
 	var clusters containers.Clusters = make([]containers.Cluster, clusterCnt)
 	random := rand.New(rand.NewSource(time.Now().UnixNano()))
 	for i := 0; i < clusterCnt; i++ {
