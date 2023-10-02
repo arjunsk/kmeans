@@ -79,36 +79,36 @@ func newKmeansElkanWithOptions(
 
 func (el *KmeansElkan) Cluster() (containers.Clusters, error) {
 
-	clusterGroup, err := el.initializer.InitCentroids(el.vectors, el.clusterCnt)
+	clusters, err := el.initializer.InitCentroids(el.vectors, el.clusterCnt)
 	if err != nil {
 		return nil, err
 	}
 
-	err = el.kmeansElkan(clusterGroup)
+	err = el.kmeansElkan(clusters)
 	if err != nil {
 		return nil, err
 	}
 
-	return clusterGroup, nil
+	return clusters, nil
 }
 
 // kmeansElkan Complexity := closer to O(n); n = number of vectors
-func (el *KmeansElkan) kmeansElkan(clusterGroup containers.Clusters) (err error) {
+func (el *KmeansElkan) kmeansElkan(clusters containers.Clusters) (err error) {
 	for i := 0; ; i++ {
 		movement := 0
-		clusterGroup.Reset()
+		clusters.Reset()
 
-		centroidSelfDistances := el.calculateCentroidDistances(clusterGroup, el.clusterCnt)
+		centroidSelfDistances := el.calculateCentroidDistances(clusters, el.clusterCnt)
 		sc := el.computeSc(centroidSelfDistances, el.clusterCnt)
 
 		// step 3
-		movement, err = el.assignData(centroidSelfDistances, sc, clusterGroup, el.vectors, i)
+		movement, err = el.assignData(centroidSelfDistances, sc, clusters, el.vectors, i)
 		if err != nil {
 			return err
 		}
 
 		// step 4 and 5
-		moveDistances, err := clusterGroup.RecenterWithDeltaDistance(el.distFn)
+		moveDistances, err := clusters.RecenterWithDeltaDistance(el.distFn)
 		if err != nil {
 			return err
 		}

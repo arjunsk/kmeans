@@ -1,6 +1,8 @@
 package containers
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestCluster_Recenter(t *testing.T) {
 	type fields struct {

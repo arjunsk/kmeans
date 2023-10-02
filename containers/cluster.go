@@ -2,6 +2,7 @@ package containers
 
 import (
 	"fmt"
+	"math"
 )
 
 // TODO: don't expose center and members
@@ -55,6 +56,15 @@ func (c *Cluster) RecenterReturningMovedDistance(distFn DistanceFunction) (moveD
 	c.Center = newCenter
 
 	return moveDistances, nil
+}
+
+func (c *Cluster) SSE() float64 {
+	sse := 0.0
+	for i := 0; i < len(c.Members); i++ {
+		dist, _ := EuclideanDistance(c.Center, c.Members[i])
+		sse += math.Pow(dist, 2)
+	}
+	return sse
 }
 
 // Reset only resets the members of the cluster. The center is not reset.

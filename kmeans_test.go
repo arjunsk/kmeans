@@ -16,31 +16,31 @@ var vectors = [][]float64{
 
 func TestTrain_lloyd(t *testing.T) {
 	kmeans, _ := clusterer.NewKmeans(vectors, 2)
-	clusterGroup, err := kmeans.Cluster()
-	if err != nil || clusterGroup == nil || len(clusterGroup) != 2 {
-		t.Log("\nClusters:", clusterGroup)
+	clusters, err := kmeans.Cluster()
+	if err != nil || clusters == nil || len(clusters) != 2 {
+		t.Log("\nClusters:", clusters)
 		t.Fail()
 	}
-	fmt.Println(clusterGroup)
+	fmt.Println(clusters)
 }
 
 func TestTrain_kpp(t *testing.T) {
 	kmeans, _ := clusterer.NewKmeansPlusPlus(vectors, 2)
-	clusterGroup, err := kmeans.Cluster()
-	if err != nil || clusterGroup == nil || len(clusterGroup) != 2 {
-		t.Log("\nClusters:", clusterGroup)
+	clusters, err := kmeans.Cluster()
+	if err != nil || clusters == nil || len(clusters) != 2 {
+		t.Log("\nClusters:", clusters)
 		t.Fail()
 	}
-	fmt.Println(clusterGroup)
+	fmt.Println(clusters)
 }
 
 func TestTrain_elkan(t *testing.T) {
 	kmeans, _ := clusterer.NewKmeansElkan(vectors, 2)
-	clusterGroup, err := kmeans.Cluster()
-	if err != nil || clusterGroup == nil || len(clusterGroup) != 2 {
+	clusters, err := kmeans.Cluster()
+	if err != nil || clusters == nil || len(clusters) != 2 {
 		t.Log("\nError:", err)
-		t.Log("\nClusters:", clusterGroup)
+		t.Log("\nClusters:", clusters)
 		t.Fail()
 	}
-	fmt.Println(clusterGroup)
+	fmt.Println(clusters)
 }
