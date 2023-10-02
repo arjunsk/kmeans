@@ -22,6 +22,7 @@ func TestTrain_lloyd(t *testing.T) {
 		t.Fail()
 	}
 	fmt.Println(clusters)
+	fmt.Println(clusters.SSE())
 }
 
 func TestTrain_kpp(t *testing.T) {
@@ -32,6 +33,7 @@ func TestTrain_kpp(t *testing.T) {
 		t.Fail()
 	}
 	fmt.Println(clusters)
+	fmt.Println(clusters.SSE())
 }
 
 func TestTrain_elkan(t *testing.T) {
@@ -43,4 +45,5 @@ func TestTrain_elkan(t *testing.T) {
 		t.Fail()
 	}
 	fmt.Println(clusters)
+	fmt.Println(clusters.SSE())
 }
