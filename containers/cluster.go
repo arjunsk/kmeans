@@ -34,7 +34,7 @@ func (c *Cluster) Recenter() error {
 	return nil
 }
 
-func (c *Cluster) RecenterReturningMovedDistance(distFn DistanceFunction) (moveDistances float64, err error) {
+func (c *Cluster) RecenterWithMovedDistance(distFn DistanceFunction) (moveDistances float64, err error) {
 	memberCnt := len(c.members)
 	if memberCnt == 0 {
 		//return 0, errors.New("kmeans: there is no mean for an empty cluster")

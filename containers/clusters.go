@@ -70,7 +70,7 @@ func (c Clusters) RecenterWithDeltaDistance(distFn DistanceFunction) (moveDistan
 		//TODO: parallelize this
 		go (func(i int) {
 			defer wg.Done()
-			moveDistances[i], _ = c[i].RecenterReturningMovedDistance(distFn)
+			moveDistances[i], _ = c[i].RecenterWithMovedDistance(distFn)
 			// NOTE: ignoring error here since RecenterReturningMovedDistance() will return an error
 			// only if the distance function returns an error. We are not returning the unhandled error from the
 			// distance function.

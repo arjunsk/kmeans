@@ -92,7 +92,7 @@ func TestCluster_RecenterReturningMovedDistance(t *testing.T) {
 				center:  tt.fields.Center,
 				members: tt.fields.Members,
 			}
-			gotMoveDistances, err := c.RecenterReturningMovedDistance(tt.args.distFn)
+			gotMoveDistances, err := c.RecenterWithMovedDistance(tt.args.distFn)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("RecenterReturningMovedDistance() error = %v, wantErr %v", err, tt.wantErr)
 				return
