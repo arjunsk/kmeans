@@ -1,12 +1,3 @@
-## Go Kmeans
-
-This is a simple implementation of the Elkan's Kmeans algorithm in Go. It is based on
-the [Kmeans++](https://en.wikipedia.org/wiki/K-means%2B%2B) algorithm for the initial centroids
-and the [Elkan's](https://cdn.aaai.org/ICML/2003/ICML03-022.pdf) algorithm for the clustering.
-
-### Usage
-
-```go
 package main
 
 import (
@@ -38,9 +29,8 @@ func main() {
 	for _, cluster := range clusters {
 		fmt.Println(cluster.Center)
 	}
-	// Output: 
+	// Output:
 	// [1 2 3 4]
 	// [130 200 343 224]
 
 }
-```

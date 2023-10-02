@@ -11,7 +11,7 @@ type Clusterer interface {
 	Cluster() (containers.Clusters, error)
 }
 
-func validateArgs(vectors []containers.Vector, clusterCnt int) error {
+func validateArgs(vectors [][]float64, clusterCnt int) error {
 	if len(vectors) == 0 {
 		return errors.New("kmeans: The data set must not be empty")
 	}

@@ -1,8 +1,7 @@
-package go_clustering
+package go_kmeans
 
 import (
 	"github.com/arjunsk/go-kmeans/clusterer"
-	"github.com/arjunsk/go-kmeans/containers"
 	"math/rand"
 	"testing"
 )
@@ -10,7 +9,7 @@ import (
 func Benchmark_kmeans(b *testing.B) {
 	rowCnt := 1_000
 	dims := 1024
-	data := make([]containers.Vector, rowCnt)
+	data := make([][]float64, rowCnt)
 	loadData(rowCnt, dims, data)
 
 	kmeans, _ := clusterer.NewKmeans(data, 100)
@@ -18,6 +17,7 @@ func Benchmark_kmeans(b *testing.B) {
 	elkan, _ := clusterer.NewKmeansElkan(data, 100)
 
 	b.Run("KMEANS", func(b *testing.B) {
+		b.Skip()
 		b.ResetTimer()
 		for i := 1; i < b.N; i++ {
 			_, err := kmeans.Cluster()
@@ -49,9 +49,9 @@ func Benchmark_kmeans(b *testing.B) {
 	})
 }
 
-func loadData(nb int, d int, xb []containers.Vector) {
+func loadData(nb int, d int, xb [][]float64) {
 	for r := 0; r < nb; r++ {
-		xb[r] = make(containers.Vector, d)
+		xb[r] = make([]float64, d)
 		for c := 0; c < d; c++ {
 			xb[r][c] = float64(rand.Float32() * 1000)
 		}

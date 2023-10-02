@@ -1,6 +1,8 @@
 package containers
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestEuclideanDistance(t *testing.T) {
 	type args struct {

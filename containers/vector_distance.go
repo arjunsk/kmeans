@@ -5,6 +5,7 @@ import (
 	"math"
 )
 
+// DistanceFunction is a function to find distance between 2 vectors
 type DistanceFunction func(v1, v2 Vector) (float64, error)
 
 // EuclideanDistance returns the Euclidean distance between two vectors
