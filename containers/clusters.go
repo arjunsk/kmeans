@@ -94,3 +94,11 @@ func (c Clusters) String() string {
 	}
 	return s
 }
+
+func (c Clusters) SSE() float64 {
+	var sse = 0.0
+	for i := 0; i < len(c); i++ {
+		sse += c[i].SSE()
+	}
+	return sse
+}
