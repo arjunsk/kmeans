@@ -1,7 +1,6 @@
-package go_kmeans
+package clusterer
 
 import (
-	"github.com/arjunsk/go-kmeans/clusterer"
 	"math/rand"
 	"testing"
 )
@@ -12,39 +11,40 @@ func Benchmark_kmeans(b *testing.B) {
 	data := make([][]float64, rowCnt)
 	loadData(rowCnt, dims, data)
 
-	kmeans, _ := clusterer.NewKmeans(data, 100)
-	kmeanspp, _ := clusterer.NewKmeansPlusPlus(data, 100)
-	elkan, _ := clusterer.NewKmeansElkan(data, 100)
+	kmeans, _ := NewKmeans(data, 100)
+	kmeanspp, _ := NewKmeansPlusPlus(data, 100)
+	elkan, _ := NewKmeansElkan(data, 100)
 
 	b.Run("KMEANS", func(b *testing.B) {
-		b.Skip()
 		b.ResetTimer()
-		for i := 1; i < b.N; i++ {
-			_, err := kmeans.Cluster()
+		for i := 0; i < b.N; i++ {
+			clusters, err := kmeans.Cluster()
 			if err != nil {
 				panic(err)
 			}
+			b.Logf("SSE %v", clusters.SSE())
 		}
 	})
 
 	b.Run("KMEANS++", func(b *testing.B) {
-		b.Skip()
 		b.ResetTimer()
-		for i := 1; i < b.N; i++ {
-			_, err := kmeanspp.Cluster()
+		for i := 0; i < b.N; i++ {
+			clusters, err := kmeanspp.Cluster()
 			if err != nil {
 				panic(err)
 			}
+			b.Logf("SSE %v", clusters.SSE())
 		}
 	})
 
 	b.Run("ELKAN", func(b *testing.B) {
 		b.ResetTimer()
-		for i := 1; i < b.N; i++ {
-			_, err := elkan.Cluster()
+		for i := 0; i < b.N; i++ {
+			clusters, err := elkan.Cluster()
 			if err != nil {
 				panic(err)
 			}
+			b.Logf("SSE %v", clusters.SSE())
 		}
 	})
 }

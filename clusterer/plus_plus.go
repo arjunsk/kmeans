@@ -30,3 +30,7 @@ func NewKmeansPlusPlus(vectors [][]float64, clusterCnt int) (Clusterer, error) {
 	}, nil
 
 }
+
+func (kpp KmeansPP) Cluster() (containers.Clusters, error) {
+	return kpp.Lloyd.Cluster()
+}

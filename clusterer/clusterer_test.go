@@ -1,8 +1,7 @@
-package go_kmeans
+package clusterer
 
 import (
 	"fmt"
-	"github.com/arjunsk/go-kmeans/clusterer"
 	"testing"
 )
 
@@ -15,7 +14,7 @@ var vectors = [][]float64{
 }
 
 func TestTrain_lloyd(t *testing.T) {
-	kmeans, _ := clusterer.NewKmeans(vectors, 2)
+	kmeans, _ := NewKmeans(vectors, 2)
 	clusters, err := kmeans.Cluster()
 	if err != nil || clusters == nil || len(clusters) != 2 {
 		t.Log("\nClusters:", clusters)
@@ -26,7 +25,7 @@ func TestTrain_lloyd(t *testing.T) {
 }
 
 func TestTrain_kpp(t *testing.T) {
-	kmeans, _ := clusterer.NewKmeansPlusPlus(vectors, 2)
+	kmeans, _ := NewKmeansPlusPlus(vectors, 2)
 	clusters, err := kmeans.Cluster()
 	if err != nil || clusters == nil || len(clusters) != 2 {
 		t.Log("\nClusters:", clusters)
@@ -37,7 +36,7 @@ func TestTrain_kpp(t *testing.T) {
 }
 
 func TestTrain_elkan(t *testing.T) {
-	kmeans, _ := clusterer.NewKmeansElkan(vectors, 2)
+	kmeans, _ := NewKmeansElkan(vectors, 2)
 	clusters, err := kmeans.Cluster()
 	if err != nil || clusters == nil || len(clusters) != 2 {
 		t.Log("\nError:", err)
