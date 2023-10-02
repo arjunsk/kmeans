@@ -1,9 +1,8 @@
 package clusterer
 
 import (
-	"errors"
-	"github.com/arjunsk/go-kmeans/containers"
-	"github.com/arjunsk/go-kmeans/initializer"
+	"github.com/arjunsk/kmeans/containers"
+	"github.com/arjunsk/kmeans/initializer"
 	"math/rand"
 )
 
@@ -23,17 +22,20 @@ var _ Clusterer = new(Lloyd)
 
 func NewKmeans(vectors [][]float64, clusterCnt int) (Clusterer, error) {
 	// Iteration count: 500 Ref: https://github.com/pgvector/pgvector/blob/8d7abb659070259e78f5c0974dde26c9e1cda8d3/src/ivfkmeans.c#L261
-	// delta threshold:0.01 Ref:https://github.com/muesli/kmeans/blob/06e72b51dbf15ea9e20146451e2c523389633707/kmeans.go#L44
-	m, err := newKmeansWithOptions(
-		0.01,
-		500,
-		containers.EuclideanDistance,
-		initializer.NewKmeansInitializer())
+	// delta threshold: .01 Ref:https://github.com/muesli/kmeans/blob/06e72b51dbf15ea9e20146451e2c523389633707/kmeans.go#L44
+	deltaThreshold := 0.01
+	iterationThreshold := 500
+
+	err := validateArgs(vectors, clusterCnt, deltaThreshold, iterationThreshold)
 	if err != nil {
 		return nil, err
 	}
 
-	err = validateArgs(vectors, clusterCnt)
+	m, err := newKmeansWithOptions(
+		deltaThreshold,
+		iterationThreshold,
+		containers.EuclideanDistance,
+		initializer.NewRandomInitializer())
 	if err != nil {
 		return nil, err
 	}
@@ -49,10 +51,6 @@ func newKmeansWithOptions(
 	iterationThreshold int,
 	distFn containers.DistanceFunction,
 	init initializer.Initializer) (Lloyd, error) {
-
-	if deltaThreshold <= 0.0 || deltaThreshold >= 1.0 {
-		return Lloyd{}, errors.New("KMeans: threshold is out of bounds (must be >0.0 and <1.0, in percent)")
-	}
 
 	return Lloyd{
 		deltaThreshold:     deltaThreshold,

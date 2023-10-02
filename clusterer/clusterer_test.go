@@ -13,7 +13,7 @@ var vectors = [][]float64{
 	{64.2, 64.2, 64.2, 64.2},
 }
 
-func TestTrain_lloyd(t *testing.T) {
+func TestCluster_lloyd(t *testing.T) {
 	kmeans, _ := NewKmeans(vectors, 2)
 	clusters, err := kmeans.Cluster()
 	if err != nil || clusters == nil || len(clusters) != 2 {
@@ -24,7 +24,7 @@ func TestTrain_lloyd(t *testing.T) {
 	fmt.Println(clusters.SSE())
 }
 
-func TestTrain_kpp(t *testing.T) {
+func TestCluster_kpp(t *testing.T) {
 	kmeans, _ := NewKmeansPlusPlus(vectors, 2)
 	clusters, err := kmeans.Cluster()
 	if err != nil || clusters == nil || len(clusters) != 2 {
@@ -35,7 +35,7 @@ func TestTrain_kpp(t *testing.T) {
 	fmt.Println(clusters.SSE())
 }
 
-func TestTrain_elkan(t *testing.T) {
+func TestCluster_elkan(t *testing.T) {
 	kmeans, _ := NewKmeansElkan(vectors, 2)
 	clusters, err := kmeans.Cluster()
 	if err != nil || clusters == nil || len(clusters) != 2 {

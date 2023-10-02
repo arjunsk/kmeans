@@ -1,9 +1,8 @@
 package clusterer
 
 import (
-	"errors"
-	"github.com/arjunsk/go-kmeans/containers"
-	"github.com/arjunsk/go-kmeans/initializer"
+	"github.com/arjunsk/kmeans/containers"
+	"github.com/arjunsk/kmeans/initializer"
 	"math"
 	"sync"
 )
@@ -29,17 +28,19 @@ type KmeansElkan struct {
 var _ Clusterer = new(KmeansElkan)
 
 func NewKmeansElkan(vectors [][]float64, clusterCnt int) (Clusterer, error) {
-	el, err := newKmeansElkanWithOptions(
-		0.01,
-		500,
-		containers.EuclideanDistance,
-		initializer.NewKmeansInitializer())
+	deltaThreshold := 0.01
+	iterationThreshold := 500
 
+	err := validateArgs(vectors, clusterCnt, deltaThreshold, iterationThreshold)
 	if err != nil {
 		return nil, err
 	}
 
-	err = validateArgs(vectors, clusterCnt)
+	el, err := newKmeansElkanWithOptions(
+		deltaThreshold,
+		iterationThreshold,
+		containers.EuclideanDistance,
+		initializer.NewRandomInitializer())
 	if err != nil {
 		return nil, err
 	}
@@ -64,10 +65,6 @@ func newKmeansElkanWithOptions(
 	iterationThreshold int,
 	distFn containers.DistanceFunction,
 	init initializer.Initializer) (KmeansElkan, error) {
-
-	if deltaThreshold <= 0.0 || deltaThreshold >= 1.0 {
-		return KmeansElkan{}, errors.New("threshold is out of bounds (must be >0.0 and <1.0, in percent)")
-	}
 
 	return KmeansElkan{
 		deltaThreshold:     deltaThreshold,

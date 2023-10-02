@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/arjunsk/go-kmeans/clusterer"
+	"github.com/arjunsk/kmeans"
 )
 
 func main() {
@@ -16,12 +16,12 @@ func main() {
 		{300, 400, 200, 110},
 	}
 
-	kmeans, err := clusterer.NewKmeansElkan(vectors, 2)
+	clusterer, err := kmeans.NewKmeansElkan(vectors, 2)
 	if err != nil {
 		panic(err)
 	}
 
-	clusters, err := kmeans.Cluster()
+	clusters, err := clusterer.Cluster()
 	if err != nil {
 		panic(err)
 	}
