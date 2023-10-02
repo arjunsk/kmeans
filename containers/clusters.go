@@ -19,13 +19,13 @@ func (c Clusters) Nearest(point Vector, distFn DistanceFunction) (minClusterIdx 
 	minClusterIdx = 0
 
 	var currDistance = 0.0
-	minDistance, err = distFn(point, c[0].Center)
+	minDistance, err = distFn(point, c[0].GetCenter())
 	if err != nil {
 		return 0, 0, err
 	}
 
 	for i := 1; i < len(c); i++ {
-		currDistance, err = distFn(point, c[i].Center)
+		currDistance, err = distFn(point, c[i].GetCenter())
 		if err != nil {
 			return 0, 0, err
 		}

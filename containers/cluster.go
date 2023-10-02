@@ -8,8 +8,14 @@ import (
 // TODO: don't expose center and members
 
 type Cluster struct {
-	Center  Vector
+	center  Vector
 	Members []Vector
+}
+
+func NewCluster(center Vector) Cluster {
+	return Cluster{
+		center: center,
+	}
 }
 
 func (c *Cluster) Add(member Vector) {
@@ -24,13 +30,13 @@ func (c *Cluster) Recenter() error {
 	}
 
 	// newCenter = "Mean" of the Members
-	newCenter := make(Vector, len(c.Center))
+	newCenter := make(Vector, len(c.center))
 	for _, member := range c.Members {
 		newCenter.Add(member)
 	}
 	newCenter.Mul(1 / float64(memberCnt))
 
-	c.Center = newCenter
+	c.center = newCenter
 	return nil
 }
 
@@ -42,18 +48,18 @@ func (c *Cluster) RecenterReturningMovedDistance(distFn DistanceFunction) (moveD
 	}
 
 	// newCenter is the "Mean" of the Members
-	newCenter := make(Vector, len(c.Center))
+	newCenter := make(Vector, len(c.center))
 	for _, member := range c.Members {
 		newCenter.Add(member)
 	}
 	newCenter.Mul(1 / float64(memberCnt))
 
-	moveDistances, err = distFn(c.Center, newCenter)
+	moveDistances, err = distFn(c.center, newCenter)
 	if err != nil {
 		return 0, err
 	}
 
-	c.Center = newCenter
+	c.center = newCenter
 
 	return moveDistances, nil
 }
@@ -61,7 +67,7 @@ func (c *Cluster) RecenterReturningMovedDistance(distFn DistanceFunction) (moveD
 func (c *Cluster) SSE() float64 {
 	sse := 0.0
 	for i := 0; i < len(c.Members); i++ {
-		dist, _ := EuclideanDistance(c.Center, c.Members[i])
+		dist, _ := EuclideanDistance(c.center, c.Members[i])
 		sse += math.Pow(dist, 2)
 	}
 	return sse
@@ -73,5 +79,9 @@ func (c *Cluster) Reset() {
 }
 
 func (c *Cluster) String() string {
-	return fmt.Sprintf("Center: %v, Members: %v", c.Center, c.Members)
+	return fmt.Sprintf("Center: %v, Members: %v", c.center, c.Members)
+}
+
+func (c *Cluster) GetCenter() Vector {
+	return c.center
 }

@@ -33,9 +33,7 @@ func (kpp *KmeansPlusPlus) InitCentroids(vectors [][]float64, clusterCnt int) (c
 
 	// 1. start with a random center
 	randIdx := rand.Intn(len(vectors))
-	clusters[0] = containers.Cluster{
-		Center: vectors[randIdx],
-	}
+	clusters[0] = containers.NewCluster(vectors[randIdx])
 
 	var wg sync.WaitGroup
 	for i := 1; i < clusterCnt; i++ {
@@ -69,7 +67,7 @@ func (kpp *KmeansPlusPlus) InitCentroids(vectors [][]float64, clusterCnt int) (c
 
 			// Select a cluster center based on a probability distribution where vectors
 			//	with larger distances have a higher chance of being chosen as the center.
-			clusters[i] = containers.Cluster{Center: vectors[nextClusterCenterIdx]}
+			clusters[i] = containers.NewCluster(vectors[nextClusterCenterIdx])
 		})(i)
 
 	}

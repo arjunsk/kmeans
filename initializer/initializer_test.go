@@ -29,8 +29,8 @@ func TestInitCentroids_random(t *testing.T) {
 
 			oneMatched := false
 			for _, want := range tt.wantPossibilities {
-				if reflect.DeepEqual(got[0].Center, want[0].Center) && reflect.DeepEqual(got[1].Center, want[1].Center) ||
-					reflect.DeepEqual(got[0].Center, want[1].Center) && reflect.DeepEqual(got[1].Center, want[0].Center) {
+				if reflect.DeepEqual(got[0].center, want[0].center) && reflect.DeepEqual(got[1].center, want[1].center) ||
+					reflect.DeepEqual(got[0].center, want[1].center) && reflect.DeepEqual(got[1].center, want[0].center) {
 					oneMatched = true
 					break
 				}
@@ -73,8 +73,8 @@ func TestInitCentroids_kmeansPlusPlus(t *testing.T) {
 
 			oneMatched := false
 			for _, want := range tt.wantPossibilities {
-				if reflect.DeepEqual(got[0].Center, want[0].Center) && reflect.DeepEqual(got[1].Center, want[1].Center) ||
-					reflect.DeepEqual(got[0].Center, want[1].Center) && reflect.DeepEqual(got[1].Center, want[0].Center) {
+				if reflect.DeepEqual(got[0].center, want[0].center) && reflect.DeepEqual(got[1].center, want[1].center) ||
+					reflect.DeepEqual(got[0].center, want[1].center) && reflect.DeepEqual(got[1].center, want[0].center) {
 					oneMatched = true
 					break
 				}
@@ -100,20 +100,20 @@ func genIO1() IO {
 		},
 		wantPossibilities: []containers.Clusters{
 			{
-				{Center: containers.Vector{1, 2, 3, 4}},
-				{Center: containers.Vector{100, 200, 300, 400}},
+				{center: containers.Vector{1, 2, 3, 4}},
+				{center: containers.Vector{100, 200, 300, 400}},
 			},
 			{
-				{Center: containers.Vector{1, 2, 3, 4}},
-				{Center: containers.Vector{130, 200, 343, 224}},
+				{center: containers.Vector{1, 2, 3, 4}},
+				{center: containers.Vector{130, 200, 343, 224}},
 			},
 			{
-				{Center: containers.Vector{0, 3, 4, 1}},
-				{Center: containers.Vector{100, 200, 300, 400}},
+				{center: containers.Vector{0, 3, 4, 1}},
+				{center: containers.Vector{100, 200, 300, 400}},
 			},
 			{
-				{Center: containers.Vector{0, 3, 4, 1}},
-				{Center: containers.Vector{130, 200, 343, 224}},
+				{center: containers.Vector{0, 3, 4, 1}},
+				{center: containers.Vector{130, 200, 343, 224}},
 			},
 		},
 		wantErr: false,

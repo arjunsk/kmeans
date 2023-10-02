@@ -37,14 +37,14 @@ func TestCluster_Recenter(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			c := &Cluster{
-				Center:  tt.fields.Center,
+				center:  tt.fields.Center,
 				Members: tt.fields.Members,
 			}
 			if err := c.Recenter(); (err != nil) != tt.wantErr {
 				t.Errorf("Recenter() error = %v, wantErr %v", err, tt.wantErr)
 			}
-			if c.Center.Compare(tt.wantCenter) != 0 {
-				t.Errorf("Recenter() gotCenter = %v, want %v", c.Center, tt.wantCenter)
+			if c.center.Compare(tt.wantCenter) != 0 {
+				t.Errorf("Recenter() gotCenter = %v, want %v", c.center, tt.wantCenter)
 			}
 		})
 	}
@@ -89,7 +89,7 @@ func TestCluster_RecenterReturningMovedDistance(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			c := &Cluster{
-				Center:  tt.fields.Center,
+				center:  tt.fields.Center,
 				Members: tt.fields.Members,
 			}
 			gotMoveDistances, err := c.RecenterReturningMovedDistance(tt.args.distFn)
@@ -100,8 +100,8 @@ func TestCluster_RecenterReturningMovedDistance(t *testing.T) {
 			if gotMoveDistances != tt.wantMoveDistances {
 				t.Errorf("RecenterReturningMovedDistance() gotMoveDistances = %v, want %v", gotMoveDistances, tt.wantMoveDistances)
 			}
-			if c.Center.Compare(tt.wantCenter) != 0 {
-				t.Errorf("Recenter() gotCenter = %v, want %v", c.Center, tt.wantCenter)
+			if c.center.Compare(tt.wantCenter) != 0 {
+				t.Errorf("Recenter() gotCenter = %v, want %v", c.center, tt.wantCenter)
 			}
 		})
 	}
@@ -127,15 +127,15 @@ func TestCluster_Reset(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			c := &Cluster{
-				Center:  tt.fields.Center,
+				center:  tt.fields.Center,
 				Members: tt.fields.Members,
 			}
 			c.Reset()
 			if len(c.Members) != 0 {
 				t.Errorf("Reset() = %v, want %v", c.Members, []Vector{})
 			}
-			if c.Center.Compare(tt.fields.Center) != 0 {
-				t.Errorf("Reset() = %v, want %v", c.Center, tt.fields.Center)
+			if c.center.Compare(tt.fields.Center) != 0 {
+				t.Errorf("Reset() = %v, want %v", c.center, tt.fields.Center)
 			}
 		})
 	}
