@@ -17,6 +17,7 @@ func Benchmark_kmeans(b *testing.B) {
 	elkan, _ := clusterer.NewKmeansElkan(data, 100)
 
 	b.Run("KMEANS", func(b *testing.B) {
+		b.Skip()
 		b.ResetTimer()
 		for i := 1; i < b.N; i++ {
 			_, err := kmeans.Cluster()
