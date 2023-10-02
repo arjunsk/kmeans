@@ -10,7 +10,7 @@ import (
 date : 2023-10-1
 goos: darwin
 goarch: arm64
-pkg: github.com/arjunsk/go-kmeans/initializer
+pkg: github.com/arjunsk/kmeans/initializer
 cpu: Apple M2 Pro
 Benchmark_kmeans/RANDOM-10         	  104032	     11292 ns/op
 Benchmark_kmeans/KMEANS++-10       	       1	3840350291 ns/op

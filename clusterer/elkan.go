@@ -93,6 +93,7 @@ func (el *KmeansElkan) Cluster() (containers.Clusters, error) {
 func (el *KmeansElkan) kmeansElkan(clusters containers.Clusters) (err error) {
 	for i := 0; ; i++ {
 		movement := 0
+		el.reset(clusters)
 		clusters.Reset()
 
 		centroidSelfDistances := el.calculateCentroidDistances(clusters, el.clusterCnt)
@@ -240,4 +241,11 @@ func (el *KmeansElkan) isConverged(i int, movement int) bool {
 		return true
 	}
 	return false
+}
+
+func (el *KmeansElkan) reset(clusters containers.Clusters) {
+	clusters.Reset()
+	for i := range el.upperBounds {
+		el.upperBounds[i] = math.MaxFloat64
+	}
 }
