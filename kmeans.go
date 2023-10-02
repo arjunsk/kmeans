@@ -1,6 +1,6 @@
-package go_kmeans
+package kmeans
 
-import "github.com/arjunsk/go-kmeans/clusterer"
+import "github.com/arjunsk/kmeans/clusterer"
 
 //TODO: Add more options using Builder pattern
 

@@ -2,7 +2,7 @@ package initializer
 
 import (
 	"errors"
-	"github.com/arjunsk/go-kmeans/containers"
+	"github.com/arjunsk/kmeans/containers"
 )
 
 type Initializer interface {

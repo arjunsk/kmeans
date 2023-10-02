@@ -1,7 +1,7 @@
 package initializer
 
 import (
-	"github.com/arjunsk/go-kmeans/containers"
+	"github.com/arjunsk/kmeans/containers"
 	"math/rand"
 	"testing"
 )

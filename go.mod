@@ -1,3 +1,3 @@
-module github.com/arjunsk/go-kmeans
+module github.com/arjunsk/kmeans
 
 go 1.20
