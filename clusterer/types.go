@@ -11,13 +11,21 @@ type Clusterer interface {
 	Cluster() (containers.Clusters, error)
 }
 
-func validateArgs(vectors [][]float64, clusterCnt int) error {
+func validateArgs(vectors [][]float64, clusterCnt int, deltaThreshold float64, iterationThreshold int) error {
 	if len(vectors) == 0 {
 		return errors.New("kmeans: The data set must not be empty")
 	}
 
 	if clusterCnt > len(vectors) {
 		return errors.New("kmeans: The count of the data set must at least equal k")
+	}
+
+	if deltaThreshold <= 0.0 || deltaThreshold >= 1.0 {
+		return errors.New("kmeans: threshold is out of bounds (must be >0.0 and <1.0, in percent)")
+	}
+
+	if iterationThreshold <= 0 {
+		return errors.New("kmeans: iterationThreshold must be > 0")
 	}
 
 	vecDim := len(vectors[0])
