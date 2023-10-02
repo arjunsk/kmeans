@@ -58,6 +58,7 @@ func (c *Cluster) RecenterReturningMovedDistance(distFn DistanceFunction) (moveD
 	return moveDistances, nil
 }
 
+// SSE returns the sum of squared errors of the cluster
 func (c *Cluster) SSE() float64 {
 	sse := 0.0
 	for i := 0; i < len(c.members); i++ {
