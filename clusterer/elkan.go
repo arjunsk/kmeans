@@ -171,7 +171,6 @@ func (el *KmeansElkan) assignData(centroidDistances [][]float64,
 	k := len(centroidDistances)
 
 	for x := range vectors {
-		//TODO: parallelize this
 
 		// c(x)
 		meanIndex := el.assignments[x]
