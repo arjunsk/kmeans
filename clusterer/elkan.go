@@ -3,8 +3,8 @@ package clusterer
 import (
 	"github.com/arjunsk/kmeans/containers"
 	"github.com/arjunsk/kmeans/initializer"
+	"golang.org/x/sync/errgroup"
 	"math"
-	"sync"
 )
 
 // KmeansElkan Ref Paper: https://cdn.aaai.org/ICML/2003/ICML03-022.pdf
@@ -128,19 +128,25 @@ func (el *KmeansElkan) calculateCentroidDistances(clusters containers.Clusters, 
 		centroidDistances[i] = make([]float64, k)
 	}
 
-	var wg sync.WaitGroup
+	//NOTE: We can parallelize this because [i][j] is computed on lower triangle.
+	//[i][j] computed don't read any other [r][c] value.
+	eg := new(errgroup.Group)
 	for i := 0; i < k-1; i++ {
 		for j := i + 1; j < k; j++ {
-			wg.Add(1)
-			//TODO: parallelize this
-			go (func(i, j int) {
-				defer wg.Done()
-				centroidDistances[i][j], _ = el.distFn(clusters[i].GetCenter(), clusters[j].GetCenter())
+			eg.Go(func() error {
+				var err error
+				centroidDistances[i][j], err = el.distFn(clusters[i].GetCenter(), clusters[j].GetCenter())
+				if err != nil {
+					return err
+				}
 				centroidDistances[j][i] = centroidDistances[i][j]
-			})(i, j)
+				return nil
+			})
 		}
 	}
-	wg.Wait()
+	if err := eg.Wait(); err != nil {
+		panic(err)
+	}
 
 	return centroidDistances
 }
