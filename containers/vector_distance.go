@@ -17,7 +17,6 @@ func EuclideanDistance(v1, v2 Vector) (float64, error) {
 
 	distance := 0.0
 	for c := range v1 {
-
 		distance += math.Pow(v1[c]-v2[c], 2)
 	}
 	return math.Sqrt(distance), nil
