@@ -16,11 +16,11 @@ func NewCluster(center Vector) Cluster {
 	}
 }
 
-func (c *Cluster) Recenter() error {
+func (c *Cluster) Recenter() {
 	memberCnt := len(c.members)
 	if memberCnt == 0 {
-		return nil
-		//return fmt.Errorf("there is no mean for an empty cluster")
+		// If there is no members, keep the previous center only.
+		return
 	}
 
 	// newCenter = "Mean" of the Members
@@ -31,7 +31,7 @@ func (c *Cluster) Recenter() error {
 	newCenter.Mul(1 / float64(memberCnt))
 
 	c.center = newCenter
-	return nil
+	return
 }
 
 func (c *Cluster) RecenterWithMovedDistance(distFn DistanceFunction) (moveDistances float64, err error) {

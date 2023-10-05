@@ -13,7 +13,6 @@ func TestCluster_Recenter(t *testing.T) {
 		name       string
 		fields     fields
 		wantCenter Vector
-		wantErr    bool
 	}{
 		{
 			name: "test1",
@@ -22,7 +21,6 @@ func TestCluster_Recenter(t *testing.T) {
 				Members: []Vector{{1, 1}, {2, 2}},
 			},
 			wantCenter: Vector{1.5, 1.5},
-			wantErr:    false,
 		},
 		{
 			name: "test2",
@@ -31,7 +29,6 @@ func TestCluster_Recenter(t *testing.T) {
 				Members: []Vector{{1, 1}, {2, 2}, {3, 3}},
 			},
 			wantCenter: Vector{2, 2},
-			wantErr:    false,
 		},
 	}
 	for _, tt := range tests {
@@ -40,9 +37,7 @@ func TestCluster_Recenter(t *testing.T) {
 				center:  tt.fields.Center,
 				members: tt.fields.Members,
 			}
-			if err := c.Recenter(); (err != nil) != tt.wantErr {
-				t.Errorf("Recenter() error = %v, wantErr %v", err, tt.wantErr)
-			}
+			c.Recenter()
 			if c.center.Compare(tt.wantCenter) != 0 {
 				t.Errorf("Recenter() gotCenter = %v, want %v", c.center, tt.wantCenter)
 			}

@@ -43,13 +43,9 @@ func (c Clusters) Recenter() error {
 	var wg sync.WaitGroup
 	for i := 0; i < clusterCnt; i++ {
 		wg.Add(1)
-		//TODO: parallelize this
 		go (func(i int) {
 			defer wg.Done()
-			_ = c[i].Recenter()
-			// NOTE: ignoring error here since Recenter() will return an error
-			// only if the distance function returns an error. We are not returning the unhandled error from the
-			// distance function.
+			c[i].Recenter()
 		})(i)
 	}
 	wg.Wait()
