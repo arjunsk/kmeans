@@ -13,7 +13,7 @@ type Clusters []Cluster
 // Nearest returns the index, distance of the cluster nearest to point
 func (c Clusters) Nearest(point Vector, distFn DistanceFunction) (minClusterIdx int, minDistance float64, err error) {
 	if distFn == nil {
-		return 0, 0, fmt.Errorf("distance function is nil")
+		panic(fmt.Errorf("distance function is nil"))
 	}
 
 	minClusterIdx = 0
