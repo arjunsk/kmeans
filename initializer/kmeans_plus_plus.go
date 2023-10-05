@@ -4,7 +4,6 @@ import (
 	"errors"
 	"github.com/arjunsk/kmeans/containers"
 	"math/rand"
-	"sync"
 )
 
 type KmeansPlusPlus struct {
@@ -35,42 +34,38 @@ func (kpp *KmeansPlusPlus) InitCentroids(vectors [][]float64, clusterCnt int) (c
 	randIdx := rand.Intn(len(vectors))
 	clusters[0] = containers.NewCluster(vectors[randIdx])
 
-	var wg sync.WaitGroup
 	for i := 1; i < clusterCnt; i++ {
-		//TODO: see if we can parallelize this loop
-		wg.Add(1)
-		go (func(i int) {
-			defer wg.Done()
-			distances := make([]float64, len(vectors))
-			sum := 0.0
-			minDistance := 0.0
-			// 2. for each data point, compute the distance to the existing centers
-			for vecIdx, vec := range vectors {
-				_, minDistance, _ = clusters[:i].Nearest(vec, kpp.DistFn)
-				// NOTE: ignoring error here since Nearest() will return an error
-				// only if the distance function returns an error. We are not returning the unhandled error from the
-				// distance function.
+		// NOTE: Since Nearest function is called on clusters-1, parallel handling
+		// can cause bugs, since all the clusters are not initialized.
+		distances := make([]float64, len(vectors))
+		sum := 0.0
+		minDistance := 0.0
+		// 2. for each data point, compute the distance to the existing centers
+		for vecIdx, vec := range vectors {
 
-				distances[vecIdx] = minDistance * minDistance // D(x)^2
-				sum += distances[vecIdx]
+			_, minDistance, err = clusters[:i].Nearest(vec, kpp.DistFn)
+			if err != nil {
+				return nil, err
 			}
 
-			// 3. choose the next random center, using a weighted probability distribution
-			// where it is chosen with probability proportional to D(x)^2
-			// Ref: https://en.wikipedia.org/wiki/K-means%2B%2B#Improved_initialization_algorithm
-			// Ref: https://stats.stackexchange.com/a/272133/397621
-			target := rand.Float64() * sum
-			nextClusterCenterIdx := 0
-			for sum = distances[0]; sum < target; sum += distances[nextClusterCenterIdx] {
-				nextClusterCenterIdx++
-			}
+			distances[vecIdx] = minDistance * minDistance // D(x)^2
+			sum += distances[vecIdx]
+		}
 
-			// Select a cluster center based on a probability distribution where vectors
-			//	with larger distances have a higher chance of being chosen as the center.
-			clusters[i] = containers.NewCluster(vectors[nextClusterCenterIdx])
-		})(i)
+		// 3. choose the next random center, using a weighted probability distribution
+		// where it is chosen with probability proportional to D(x)^2
+		// Ref: https://en.wikipedia.org/wiki/K-means%2B%2B#Improved_initialization_algorithm
+		// Ref: https://stats.stackexchange.com/a/272133/397621
+		target := rand.Float64() * sum
+		nextClusterCenterIdx := 0
+		for sum = distances[0]; sum < target; sum += distances[nextClusterCenterIdx] {
+			nextClusterCenterIdx++
+		}
+
+		// Select a cluster center based on a probability distribution where vectors
+		//	with larger distances have a higher chance of being chosen as the center.
+		clusters[i] = containers.NewCluster(vectors[nextClusterCenterIdx])
 
 	}
-	wg.Wait()
 	return clusters, nil
 }
