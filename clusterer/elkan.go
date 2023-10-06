@@ -40,7 +40,7 @@ func NewKmeansElkan(vectors [][]float64, clusterCnt int) (Clusterer, error) {
 		deltaThreshold,
 		iterationThreshold,
 		containers.EuclideanDistance,
-		initializer.NewKmeansPlusPlusInitializer(containers.EuclideanDistance))
+		initializer.NewRandomInitializer())
 	if err != nil {
 		return nil, err
 	}
