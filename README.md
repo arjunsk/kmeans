@@ -44,11 +44,12 @@ func main() {
 }
 ```
 
-### Why not Kmeans++ initialization?
+### Why not Kmeans++ initialization in Elkan's?
+The default settings of Elkan's Kmeans is to use [random initialization](/initializer/random.go)
+instead of  [Kmeans++ initialization](/initializer/kmeans_plus_plus.go).
 
-Based on the excerpt
-from [FAISS discussion](https://github.com/facebookresearch/faiss/issues/268#issuecomment-348184505), it was observed
-that Kmeans++ overhead computation cost is not worth for large dimension vectors.
+Based on the excerpt from [FAISS discussion](https://github.com/facebookresearch/faiss/issues/268#issuecomment-348184505), it was observed
+that Kmeans++ overhead computation cost is not worth for large scale use case.
 
 > Scikitlearn uses k-means++ initialization by default (you can also use random points), which is good in the specific
 > corner-case you consider. It should actually gives you perfect result even without any iteration with high probability,
