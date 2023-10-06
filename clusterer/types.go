@@ -8,6 +8,10 @@ import (
 )
 
 type Clusterer interface {
+	// Cluster will run the clustering algorithm.
+	// NOTE: We will not support adding clusterCnt as argument ie Cluster(clusterCnt).
+	// This would require a factory pattern to create states
+	// (assignments, lowerBounds, upperBounds, r) etc. for each call.
 	Cluster() (containers.Clusters, error)
 }
 
