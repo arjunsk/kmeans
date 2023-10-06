@@ -39,6 +39,7 @@ func Benchmark_kmeans(b *testing.B) {
 	})
 
 	b.Run("KMEANS++", func(b *testing.B) {
+		b.Skipf("KMEANS++ will take alot of time for k=100. Hence skipping")
 		b.ResetTimer()
 		for i := 0; i < b.N; i++ {
 			clusters, err := kmeanspp.Cluster()
