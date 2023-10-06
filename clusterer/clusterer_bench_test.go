@@ -1,6 +1,8 @@
 package clusterer
 
 import (
+	"github.com/arjunsk/kmeans/containers"
+	"github.com/arjunsk/kmeans/initializer"
 	"math/rand"
 	"testing"
 )
@@ -23,9 +25,15 @@ func Benchmark_kmeans(b *testing.B) {
 	data := make([][]float64, rowCnt)
 	loadData(rowCnt, dims, data)
 
-	kmeans, _ := NewKmeans(data, 100)
-	kmeanspp, _ := NewKmeansPlusPlus(data, 100)
-	elkan, _ := NewKmeansElkan(data, 100)
+	kmeans, _ := NewKmeans(data, 100,
+		0.01, 500,
+		containers.EuclideanDistance, initializer.NewRandomInitializer())
+	kmeanspp, _ := NewKmeansPlusPlus(data, 100,
+		0.01, 500,
+		containers.EuclideanDistance)
+	elkan, _ := NewKmeansElkan(data, 100,
+		0.01, 500,
+		containers.EuclideanDistance, initializer.NewRandomInitializer())
 
 	b.Run("KMEANS", func(b *testing.B) {
 		b.ResetTimer()

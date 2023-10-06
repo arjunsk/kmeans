@@ -16,7 +16,8 @@ func main() {
 		{300, 400, 200, 110},
 	}
 
-	clusterer, err := kmeans.NewKmeansElkan(vectors, 2)
+	builder := kmeans.NewClusterBuilder(kmeans.ELKAN, vectors, 2)
+	clusterer, err := builder.Build()
 	if err != nil {
 		panic(err)
 	}

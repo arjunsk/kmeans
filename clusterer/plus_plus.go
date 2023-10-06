@@ -11,19 +11,19 @@ type KmeansPP struct {
 
 var _ Clusterer = new(KmeansPP)
 
-func NewKmeansPlusPlus(vectors [][]float64, clusterCnt int) (Clusterer, error) {
+func NewKmeansPlusPlus(vectors [][]float64, clusterCnt int,
+	deltaThreshold float64,
+	iterationThreshold int,
+	distFn containers.DistanceFunction) (Clusterer, error) {
 
-	clusterer, err := newKmeansWithOptions(
-		0.01,
-		500,
-		containers.EuclideanDistance,
-		initializer.NewKmeansPlusPlusInitializer(containers.EuclideanDistance))
-	if err != nil {
-		return nil, err
+	clusterer := Lloyd{
+		deltaThreshold:     deltaThreshold,
+		iterationThreshold: iterationThreshold,
+		distFn:             distFn,
+		initializer:        initializer.NewKmeansPlusPlusInitializer(distFn),
+		vectors:            vectors,
+		clusterCnt:         clusterCnt,
 	}
-
-	clusterer.vectors = vectors
-	clusterer.clusterCnt = clusterCnt
 
 	return &KmeansPP{
 		Lloyd: clusterer,

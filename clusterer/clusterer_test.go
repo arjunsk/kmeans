@@ -2,6 +2,8 @@ package clusterer
 
 import (
 	"fmt"
+	"github.com/arjunsk/kmeans/containers"
+	"github.com/arjunsk/kmeans/initializer"
 	"testing"
 )
 
@@ -14,7 +16,9 @@ var vectors = [][]float64{
 }
 
 func TestCluster_lloyd(t *testing.T) {
-	kmeans, _ := NewKmeans(vectors, 2)
+	kmeans, _ := NewKmeans(vectors, 2,
+		0.01, 500,
+		containers.EuclideanDistance, initializer.NewRandomInitializer())
 	clusters, err := kmeans.Cluster()
 	if err != nil || clusters == nil || len(clusters) != 2 {
 		t.Log("\nClusters:", clusters)
@@ -25,7 +29,9 @@ func TestCluster_lloyd(t *testing.T) {
 }
 
 func TestCluster_kpp(t *testing.T) {
-	kmeans, _ := NewKmeansPlusPlus(vectors, 2)
+	kmeans, _ := NewKmeansPlusPlus(vectors, 2,
+		0.01, 500,
+		containers.EuclideanDistance)
 	clusters, err := kmeans.Cluster()
 	if err != nil || clusters == nil || len(clusters) != 2 {
 		t.Log("\nClusters:", clusters)
@@ -36,7 +42,10 @@ func TestCluster_kpp(t *testing.T) {
 }
 
 func TestCluster_elkan(t *testing.T) {
-	kmeans, _ := NewKmeansElkan(vectors, 2)
+	kmeans, _ := NewKmeansElkan(vectors, 2,
+		0.01, 500,
+		containers.EuclideanDistance,
+		initializer.NewRandomInitializer())
 	clusters, err := kmeans.Cluster()
 	if err != nil || clusters == nil || len(clusters) != 2 {
 		t.Log("\nError:", err)

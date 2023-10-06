@@ -5,6 +5,8 @@ import (
 	"github.com/arjunsk/kmeans/containers"
 )
 
+// Initializer is an interface and not a function type because initializer like kmeans++
+// requires extra arguments.
 type Initializer interface {
 	InitCentroids(vectors [][]float64, clusterCnt int) (containers.Clusters, error)
 }
