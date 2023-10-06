@@ -133,15 +133,17 @@ func (el *KmeansElkan) calculateCentroidDistances(clusters containers.Clusters, 
 	eg := new(errgroup.Group)
 	for i := 0; i < k-1; i++ {
 		for j := i + 1; j < k; j++ {
-			eg.Go(func() error {
-				var err error
-				centroidDistances[i][j], err = el.distFn(clusters[i].GetCenter(), clusters[j].GetCenter())
-				if err != nil {
-					return err
-				}
-				centroidDistances[j][i] = centroidDistances[i][j]
-				return nil
-			})
+			func(r, c int) {
+				eg.Go(func() error {
+					var err error
+					centroidDistances[r][c], err = el.distFn(clusters[r].GetCenter(), clusters[c].GetCenter())
+					if err != nil {
+						return err
+					}
+					centroidDistances[c][r] = centroidDistances[r][c]
+					return nil
+				})
+			}(i, j)
 		}
 	}
 	if err := eg.Wait(); err != nil {

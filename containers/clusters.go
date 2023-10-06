@@ -63,13 +63,15 @@ func (c Clusters) RecenterWithDeltaDistance(distFn DistanceFunction) (moveDistan
 
 	eg := new(errgroup.Group)
 	for i := 0; i < clusterCnt; i++ {
-		eg.Go(func() error {
-			moveDistances[i], err = c[i].RecenterWithMovedDistance(distFn)
-			if err != nil {
-				return err
-			}
-			return nil
-		})
+		func(id int) {
+			eg.Go(func() error {
+				moveDistances[id], err = c[id].RecenterWithMovedDistance(distFn)
+				if err != nil {
+					return err
+				}
+				return nil
+			})
+		}(i)
 	}
 
 	if err = eg.Wait(); err != nil {
