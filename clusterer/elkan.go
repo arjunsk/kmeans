@@ -3,8 +3,8 @@ package clusterer
 import (
 	"github.com/arjunsk/kmeans/containers"
 	"github.com/arjunsk/kmeans/initializer"
+	"golang.org/x/sync/errgroup"
 	"math"
-	"sync"
 )
 
 // KmeansElkan Ref Paper: https://cdn.aaai.org/ICML/2003/ICML03-022.pdf
@@ -128,19 +128,27 @@ func (el *KmeansElkan) calculateCentroidDistances(clusters containers.Clusters, 
 		centroidDistances[i] = make([]float64, k)
 	}
 
-	var wg sync.WaitGroup
+	//NOTE: We can parallelize this because [i][j] is computed on lower triangle.
+	//[i][j] computed don't read any other [r][c] value.
+	eg := new(errgroup.Group)
 	for i := 0; i < k-1; i++ {
 		for j := i + 1; j < k; j++ {
-			wg.Add(1)
-			//TODO: parallelize this
-			go (func(i, j int) {
-				defer wg.Done()
-				centroidDistances[i][j], _ = el.distFn(clusters[i].Center, clusters[j].Center)
-				centroidDistances[j][i] = centroidDistances[i][j]
-			})(i, j)
+			func(r, c int) {
+				eg.Go(func() error {
+					var err error
+					centroidDistances[r][c], err = el.distFn(clusters[r].GetCenter(), clusters[c].GetCenter())
+					if err != nil {
+						return err
+					}
+					centroidDistances[c][r] = centroidDistances[r][c]
+					return nil
+				})
+			}(i, j)
 		}
 	}
-	wg.Wait()
+	if err := eg.Wait(); err != nil {
+		panic(err)
+	}
 
 	return centroidDistances
 }
@@ -171,7 +179,6 @@ func (el *KmeansElkan) assignData(centroidDistances [][]float64,
 	k := len(centroidDistances)
 
 	for x := range vectors {
-		//TODO: parallelize this
 
 		// c(x)
 		meanIndex := el.assignments[x]
@@ -188,7 +195,7 @@ func (el *KmeansElkan) assignData(centroidDistances [][]float64,
 
 				//step3a BoundsUpdate
 				if el.r[x] {
-					distance, err := el.distFn(vectors[x], clusters[meanIndex].Center)
+					distance, err := el.distFn(vectors[x], clusters[meanIndex].GetCenter())
 					if err != nil {
 						return 0, err
 					}
@@ -200,7 +207,7 @@ func (el *KmeansElkan) assignData(centroidDistances [][]float64,
 				//step3b Update
 				if el.upperBounds[x] > el.lowerBounds[x][c] ||
 					el.upperBounds[x] > centroidDistances[meanIndex][c]*0.5 {
-					newDistance, _ := el.distFn(vectors[x], clusters[c].Center)
+					newDistance, _ := el.distFn(vectors[x], clusters[c].GetCenter())
 					el.lowerBounds[x][c] = newDistance
 					if newDistance < el.upperBounds[x] {
 						meanIndex = c
@@ -218,7 +225,7 @@ func (el *KmeansElkan) assignData(centroidDistances [][]float64,
 			moves++
 		}
 
-		clusters[meanIndex].Add(vectors[x])
+		clusters[meanIndex].AddMember(vectors[x])
 	}
 	return moves, nil
 }

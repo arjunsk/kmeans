@@ -27,7 +27,7 @@ func main() {
 	}
 
 	for _, cluster := range clusters {
-		fmt.Println(cluster.Center)
+		fmt.Println(cluster.GetCenter())
 	}
 	// Output:
 	// [1 2 3 4]

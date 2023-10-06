@@ -2,6 +2,7 @@ package containers
 
 import (
 	"fmt"
+	"golang.org/x/sync/errgroup"
 	"sync"
 )
 
@@ -13,19 +14,19 @@ type Clusters []Cluster
 // Nearest returns the index, distance of the cluster nearest to point
 func (c Clusters) Nearest(point Vector, distFn DistanceFunction) (minClusterIdx int, minDistance float64, err error) {
 	if distFn == nil {
-		return 0, 0, fmt.Errorf("distance function is nil")
+		panic(fmt.Errorf("distance function is nil"))
 	}
 
 	minClusterIdx = 0
 
 	var currDistance = 0.0
-	minDistance, err = distFn(point, c[0].Center)
+	minDistance, err = distFn(point, c[0].GetCenter())
 	if err != nil {
 		return 0, 0, err
 	}
 
 	for i := 1; i < len(c); i++ {
-		currDistance, err = distFn(point, c[i].Center)
+		currDistance, err = distFn(point, c[i].GetCenter())
 		if err != nil {
 			return 0, 0, err
 		}
@@ -43,13 +44,9 @@ func (c Clusters) Recenter() error {
 	var wg sync.WaitGroup
 	for i := 0; i < clusterCnt; i++ {
 		wg.Add(1)
-		//TODO: parallelize this
 		go (func(i int) {
 			defer wg.Done()
-			_ = c[i].Recenter()
-			// NOTE: ignoring error here since Recenter() will return an error
-			// only if the distance function returns an error. We are not returning the unhandled error from the
-			// distance function.
+			c[i].Recenter()
 		})(i)
 	}
 	wg.Wait()
@@ -64,20 +61,22 @@ func (c Clusters) RecenterWithDeltaDistance(distFn DistanceFunction) (moveDistan
 	clusterCnt := len(c)
 	moveDistances = make([]float64, clusterCnt)
 
-	var wg sync.WaitGroup
+	eg := new(errgroup.Group)
 	for i := 0; i < clusterCnt; i++ {
-		wg.Add(1)
-		//TODO: parallelize this
-		go (func(i int) {
-			defer wg.Done()
-			moveDistances[i], _ = c[i].RecenterReturningMovedDistance(distFn)
-			// NOTE: ignoring error here since RecenterReturningMovedDistance() will return an error
-			// only if the distance function returns an error. We are not returning the unhandled error from the
-			// distance function.
-		})(i)
-
+		func(id int) {
+			eg.Go(func() error {
+				moveDistances[id], err = c[id].RecenterWithMovedDistance(distFn)
+				if err != nil {
+					return err
+				}
+				return nil
+			})
+		}(i)
 	}
-	wg.Wait()
+
+	if err = eg.Wait(); err != nil {
+		return nil, err
+	}
 	return moveDistances, nil
 }
 

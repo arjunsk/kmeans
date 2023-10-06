@@ -23,9 +23,7 @@ func (k *Random) InitCentroids(vectors [][]float64, clusterCnt int) (containers.
 	random := rand.New(rand.NewSource(time.Now().UnixNano()))
 	for i := 0; i < clusterCnt; i++ {
 		randIdx := random.Intn(inputCnt)
-		clusters[i] = containers.Cluster{
-			Center: vectors[randIdx],
-		}
+		clusters[i] = containers.NewCluster(vectors[randIdx])
 	}
 
 	return clusters, nil

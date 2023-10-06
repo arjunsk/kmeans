@@ -16,12 +16,12 @@ func TestClusters_Recenter(t *testing.T) {
 			name: "Test1",
 			c: Clusters{
 				Cluster{
-					Center:  Vector{1, 1},
-					Members: []Vector{{1, 1}, {2, 2}, {3, 3}},
+					center:  Vector{1, 1},
+					members: []Vector{{1, 1}, {2, 2}, {3, 3}},
 				},
 				Cluster{
-					Center:  Vector{1, 1},
-					Members: []Vector{{1, 1}, {2, 2}},
+					center:  Vector{1, 1},
+					members: []Vector{{1, 1}, {2, 2}},
 				},
 			},
 			wantErr: false,
@@ -37,8 +37,8 @@ func TestClusters_Recenter(t *testing.T) {
 				t.Errorf("Recenter() error = %v, wantErr %v", err, tt.wantErr)
 			}
 			for i, cluster := range tt.c {
-				if cluster.Center.Compare(tt.wantCenters[i]) != 0 {
-					t.Errorf("Recenter() gotCenter = %v, want %v", cluster.Center, tt.wantCenters[i])
+				if cluster.center.Compare(tt.wantCenters[i]) != 0 {
+					t.Errorf("Recenter() gotCenter = %v, want %v", cluster.center, tt.wantCenters[i])
 				}
 			}
 		})
@@ -61,12 +61,12 @@ func TestClusters_RecenterWithDeltaDistance(t *testing.T) {
 			name: "Test1",
 			c: Clusters{
 				Cluster{
-					Center:  Vector{1, 1},
-					Members: []Vector{{1, 1}, {2, 2}, {3, 3}},
+					center:  Vector{1, 1},
+					members: []Vector{{1, 1}, {2, 2}, {3, 3}},
 				},
 				Cluster{
-					Center:  Vector{1, 1},
-					Members: []Vector{{1, 1}, {2, 2}},
+					center:  Vector{1, 1},
+					members: []Vector{{1, 1}, {2, 2}},
 				},
 			},
 			wantErr: false,
@@ -94,8 +94,8 @@ func TestClusters_RecenterWithDeltaDistance(t *testing.T) {
 				t.Errorf("RecenterWithDeltaDistance() gotMoveDistances = %v, want %v", gotMoveDistances, tt.wantMoveDistances)
 			}
 			for i, cluster := range tt.c {
-				if cluster.Center.Compare(tt.wantCenters[i]) != 0 {
-					t.Errorf("Recenter() gotCenter = %v, want %v", cluster.Center, tt.wantCenters[i])
+				if cluster.center.Compare(tt.wantCenters[i]) != 0 {
+					t.Errorf("Recenter() gotCenter = %v, want %v", cluster.center, tt.wantCenters[i])
 				}
 			}
 		})
@@ -111,12 +111,12 @@ func TestClusters_Reset(t *testing.T) {
 			name: "Test1",
 			c: Clusters{
 				Cluster{
-					Center:  Vector{1, 1},
-					Members: []Vector{{1, 1}, {2, 2}, {3, 3}},
+					center:  Vector{1, 1},
+					members: []Vector{{1, 1}, {2, 2}, {3, 3}},
 				},
 				Cluster{
-					Center:  Vector{2, 2},
-					Members: []Vector{{1, 1}, {2, 2}, {3, 3}},
+					center:  Vector{2, 2},
+					members: []Vector{{1, 1}, {2, 2}, {3, 3}},
 				},
 			},
 		},
@@ -125,12 +125,12 @@ func TestClusters_Reset(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.c.Reset()
 			for _, cluster := range tt.c {
-				if len(cluster.Members) != 0 {
-					t.Errorf("Clusters.Reset() = %v, want %v", cluster.Members, []Vector{})
+				if len(cluster.members) != 0 {
+					t.Errorf("Clusters.Reset() = %v, want %v", cluster.members, []Vector{})
 				}
-				if cluster.Center.Compare(Vector{}) == 0 {
+				if cluster.center.Compare(Vector{}) == 0 {
 					// If center is cleared, then there is a problem.
-					t.Errorf("Clusters.Reset() = %v, want %v", Vector{}, cluster.Center)
+					t.Errorf("Clusters.Reset() = %v, want %v", Vector{}, cluster.center)
 				}
 			}
 		})
@@ -154,12 +154,12 @@ func TestClusters_Nearest(t *testing.T) {
 			name: "Test1",
 			c: Clusters{
 				Cluster{
-					Center:  Vector{1, 1},
-					Members: []Vector{{1, 1}, {2, 2}, {3, 3}},
+					center:  Vector{1, 1},
+					members: []Vector{{1, 1}, {2, 2}, {3, 3}},
 				},
 				Cluster{
-					Center:  Vector{2, 2},
-					Members: []Vector{{1, 1}, {2, 2}, {3, 3}},
+					center:  Vector{2, 2},
+					members: []Vector{{1, 1}, {2, 2}, {3, 3}},
 				},
 			},
 			args: args{
@@ -174,12 +174,12 @@ func TestClusters_Nearest(t *testing.T) {
 			name: "Test2",
 			c: Clusters{
 				Cluster{
-					Center:  Vector{1, 1},
-					Members: []Vector{{1, 1}, {2, 2}, {3, 3}},
+					center:  Vector{1, 1},
+					members: []Vector{{1, 1}, {2, 2}, {3, 3}},
 				},
 				Cluster{
-					Center:  Vector{2, 2},
-					Members: []Vector{{1, 1}, {2, 2}, {3, 3}},
+					center:  Vector{2, 2},
+					members: []Vector{{1, 1}, {2, 2}, {3, 3}},
 				},
 			},
 			args: args{

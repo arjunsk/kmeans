@@ -13,7 +13,6 @@ func TestCluster_Recenter(t *testing.T) {
 		name       string
 		fields     fields
 		wantCenter Vector
-		wantErr    bool
 	}{
 		{
 			name: "test1",
@@ -22,7 +21,6 @@ func TestCluster_Recenter(t *testing.T) {
 				Members: []Vector{{1, 1}, {2, 2}},
 			},
 			wantCenter: Vector{1.5, 1.5},
-			wantErr:    false,
 		},
 		{
 			name: "test2",
@@ -31,20 +29,17 @@ func TestCluster_Recenter(t *testing.T) {
 				Members: []Vector{{1, 1}, {2, 2}, {3, 3}},
 			},
 			wantCenter: Vector{2, 2},
-			wantErr:    false,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			c := &Cluster{
-				Center:  tt.fields.Center,
-				Members: tt.fields.Members,
+				center:  tt.fields.Center,
+				members: tt.fields.Members,
 			}
-			if err := c.Recenter(); (err != nil) != tt.wantErr {
-				t.Errorf("Recenter() error = %v, wantErr %v", err, tt.wantErr)
-			}
-			if c.Center.Compare(tt.wantCenter) != 0 {
-				t.Errorf("Recenter() gotCenter = %v, want %v", c.Center, tt.wantCenter)
+			c.Recenter()
+			if c.center.Compare(tt.wantCenter) != 0 {
+				t.Errorf("Recenter() gotCenter = %v, want %v", c.center, tt.wantCenter)
 			}
 		})
 	}
@@ -89,10 +84,10 @@ func TestCluster_RecenterReturningMovedDistance(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			c := &Cluster{
-				Center:  tt.fields.Center,
-				Members: tt.fields.Members,
+				center:  tt.fields.Center,
+				members: tt.fields.Members,
 			}
-			gotMoveDistances, err := c.RecenterReturningMovedDistance(tt.args.distFn)
+			gotMoveDistances, err := c.RecenterWithMovedDistance(tt.args.distFn)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("RecenterReturningMovedDistance() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -100,8 +95,8 @@ func TestCluster_RecenterReturningMovedDistance(t *testing.T) {
 			if gotMoveDistances != tt.wantMoveDistances {
 				t.Errorf("RecenterReturningMovedDistance() gotMoveDistances = %v, want %v", gotMoveDistances, tt.wantMoveDistances)
 			}
-			if c.Center.Compare(tt.wantCenter) != 0 {
-				t.Errorf("Recenter() gotCenter = %v, want %v", c.Center, tt.wantCenter)
+			if c.center.Compare(tt.wantCenter) != 0 {
+				t.Errorf("Recenter() gotCenter = %v, want %v", c.center, tt.wantCenter)
 			}
 		})
 	}
@@ -127,15 +122,15 @@ func TestCluster_Reset(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			c := &Cluster{
-				Center:  tt.fields.Center,
-				Members: tt.fields.Members,
+				center:  tt.fields.Center,
+				members: tt.fields.Members,
 			}
 			c.Reset()
-			if len(c.Members) != 0 {
-				t.Errorf("Reset() = %v, want %v", c.Members, []Vector{})
+			if len(c.members) != 0 {
+				t.Errorf("Reset() = %v, want %v", c.members, []Vector{})
 			}
-			if c.Center.Compare(tt.fields.Center) != 0 {
-				t.Errorf("Reset() = %v, want %v", c.Center, tt.fields.Center)
+			if c.center.Compare(tt.fields.Center) != 0 {
+				t.Errorf("Reset() = %v, want %v", c.center, tt.fields.Center)
 			}
 		})
 	}

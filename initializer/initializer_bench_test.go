@@ -12,10 +12,12 @@ goos: darwin
 goarch: arm64
 pkg: github.com/arjunsk/kmeans/initializer
 cpu: Apple M2 Pro
-Benchmark_kmeans/RANDOM-10         	  104032	     11292 ns/op
-Benchmark_kmeans/KMEANS++-10       	       1	3840350291 ns/op
+rows: 1000
+dims: 1024
+Benchmark_InitCentroids/RANDOM-10         	  104032	     11292 ns/op
+Benchmark_InitCentroids/KMEANS++-10       	       1	3840350291 ns/op
 */
-func Benchmark_kmeans(b *testing.B) {
+func Benchmark_InitCentroids(b *testing.B) {
 	rowCnt := 1_000
 	dims := 1024
 	data := make([][]float64, rowCnt)

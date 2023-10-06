@@ -11,12 +11,14 @@ goos: darwin
 goarch: arm64
 pkg: github.com/arjunsk/kmeans/clusterer
 cpu: Apple M2 Pro
-Benchmark_kmeans/KMEANS-10         	       1	4426765042 ns/op
-Benchmark_kmeans/KMEANS++-10       	       1	8420956083 ns/op
-Benchmark_kmeans/ELKAN-10          	       1	4060144125 ns/op
+rows: 5_000
+dims: 1024
+Benchmark_kmeans/KMEANS-10         	       1	32952745208 ns/op
+Benchmark_kmeans/KMEANS++-10       	       1	89310750250 ns/op
+Benchmark_kmeans/ELKAN-10          	       1	21269951792 ns/op
 */
 func Benchmark_kmeans(b *testing.B) {
-	rowCnt := 1_000
+	rowCnt := 5_000
 	dims := 1024
 	data := make([][]float64, rowCnt)
 	loadData(rowCnt, dims, data)
@@ -37,6 +39,7 @@ func Benchmark_kmeans(b *testing.B) {
 	})
 
 	b.Run("KMEANS++", func(b *testing.B) {
+		b.Skipf("KMEANS++ will take alot of time for k=100. Hence skipping")
 		b.ResetTimer()
 		for i := 0; i < b.N; i++ {
 			clusters, err := kmeanspp.Cluster()

@@ -1,8 +1,20 @@
-## Go Kmeans
+# Go Kmeans
 
-This is a simple implementation of the Elkan's Kmeans algorithm in Go. It is based on
-the [Kmeans++](https://en.wikipedia.org/wiki/K-means%2B%2B) algorithm for the initial centroids
-and the [Elkan's](https://cdn.aaai.org/ICML/2003/ICML03-022.pdf) algorithm for the clustering.
+This is a simple implementation of the [Elkan's Kmeans](https://cdn.aaai.org/ICML/2003/ICML03-022.pdf) 
+algorithm in Go.
+
+### Why not Kmeans++ initialization?
+
+Based on the excerpt
+from [FAISS discussion](https://github.com/facebookresearch/faiss/issues/268#issuecomment-348184505), it was observed
+that Kmeans++ overhead computation cost is not worth for large dimension vectors.
+
+> Scikitlearn uses k-means++ initialization by default (you can also use random points), which is good in the specific
+> corner-case you consider. It should actually gives you perfect result even without any iteration with high probability,
+> because the kind of evaluation you consider is exactly what k-means++ has be designed to better handle.
+> We have not implemented it in Faiss, because with our former Yael library, which implements both k-means++ and regular
+> random initialization, we observed that the overhead computational cost was not worth the saving (negligible) in all
+> large-scale settings we have considered.
 
 ### Usage
 
