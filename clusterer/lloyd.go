@@ -20,44 +20,27 @@ type Lloyd struct {
 
 var _ Clusterer = new(Lloyd)
 
-func NewKmeans(vectors [][]float64, clusterCnt int) (Clusterer, error) {
-	// Iteration count: 500 Ref: https://github.com/pgvector/pgvector/blob/8d7abb659070259e78f5c0974dde26c9e1cda8d3/src/ivfkmeans.c#L261
-	// delta threshold: .01 Ref:https://github.com/muesli/kmeans/blob/06e72b51dbf15ea9e20146451e2c523389633707/kmeans.go#L44
-	deltaThreshold := 0.01
-	iterationThreshold := 500
+func NewKmeans(vectors [][]float64, clusterCnt int,
+	deltaThreshold float64,
+	iterationThreshold int,
+	distFn containers.DistanceFunction,
+	init initializer.Initializer) (Clusterer, error) {
 
 	err := validateArgs(vectors, clusterCnt, deltaThreshold, iterationThreshold)
 	if err != nil {
 		return nil, err
 	}
 
-	m, err := newKmeansWithOptions(
-		deltaThreshold,
-		iterationThreshold,
-		containers.EuclideanDistance,
-		initializer.NewRandomInitializer())
-	if err != nil {
-		return nil, err
-	}
-
-	m.vectors = vectors
-	m.clusterCnt = clusterCnt
-
-	return m, nil
-}
-
-func newKmeansWithOptions(
-	deltaThreshold float64,
-	iterationThreshold int,
-	distFn containers.DistanceFunction,
-	init initializer.Initializer) (Lloyd, error) {
-
-	return Lloyd{
+	m := Lloyd{
 		deltaThreshold:     deltaThreshold,
 		iterationThreshold: iterationThreshold,
 		distFn:             distFn,
 		initializer:        init,
-	}, nil
+		vectors:            vectors,
+		clusterCnt:         clusterCnt,
+	}
+
+	return m, nil
 }
 
 func (ll Lloyd) Cluster() (containers.Clusters, error) {

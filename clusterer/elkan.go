@@ -27,32 +27,32 @@ type KmeansElkan struct {
 
 var _ Clusterer = new(KmeansElkan)
 
-func NewKmeansElkan(vectors [][]float64, clusterCnt int) (Clusterer, error) {
-	deltaThreshold := 0.01
-	iterationThreshold := 500
+func NewKmeansElkan(vectors [][]float64, clusterCnt int,
+	deltaThreshold float64,
+	iterationThreshold int,
+	distFn containers.DistanceFunction,
+	init initializer.Initializer) (Clusterer, error) {
 
 	err := validateArgs(vectors, clusterCnt, deltaThreshold, iterationThreshold)
 	if err != nil {
 		return nil, err
 	}
 
-	el, err := newKmeansElkanWithOptions(
-		deltaThreshold,
-		iterationThreshold,
-		containers.EuclideanDistance,
-		initializer.NewRandomInitializer())
-	if err != nil {
-		return nil, err
+	n := len(vectors)
+
+	el := KmeansElkan{
+		deltaThreshold:     deltaThreshold,
+		iterationThreshold: iterationThreshold,
+		distFn:             distFn,
+		initializer:        init,
+		vectors:            vectors,
+		clusterCnt:         clusterCnt,
+		r:                  make([]bool, n),
+		assignments:        make([]int, n),
+		upperBounds:        make([]float64, n),
+		lowerBounds:        make([][]float64, n),
 	}
 
-	el.vectors = vectors
-	el.clusterCnt = clusterCnt
-
-	n := len(vectors)
-	el.r = make([]bool, n)
-	el.assignments = make([]int, n)
-	el.upperBounds = make([]float64, n)
-	el.lowerBounds = make([][]float64, n)
 	for i := range el.lowerBounds {
 		el.lowerBounds[i] = make([]float64, clusterCnt)
 	}
