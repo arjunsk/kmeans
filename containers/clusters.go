@@ -2,6 +2,7 @@ package containers
 
 import (
 	"fmt"
+	"golang.org/x/sync/errgroup"
 	"sync"
 )
 
@@ -60,20 +61,20 @@ func (c Clusters) RecenterWithDeltaDistance(distFn DistanceFunction) (moveDistan
 	clusterCnt := len(c)
 	moveDistances = make([]float64, clusterCnt)
 
-	var wg sync.WaitGroup
+	eg := new(errgroup.Group)
 	for i := 0; i < clusterCnt; i++ {
-		wg.Add(1)
-		//TODO: parallelize this
-		go (func(i int) {
-			defer wg.Done()
-			moveDistances[i], _ = c[i].RecenterWithMovedDistance(distFn)
-			// NOTE: ignoring error here since RecenterReturningMovedDistance() will return an error
-			// only if the distance function returns an error. We are not returning the unhandled error from the
-			// distance function.
-		})(i)
-
+		eg.Go(func() error {
+			moveDistances[i], err = c[i].RecenterWithMovedDistance(distFn)
+			if err != nil {
+				return err
+			}
+			return nil
+		})
 	}
-	wg.Wait()
+
+	if err = eg.Wait(); err != nil {
+		return nil, err
+	}
 	return moveDistances, nil
 }
 
