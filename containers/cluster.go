@@ -77,11 +77,11 @@ func (c *Cluster) String() string {
 	return fmt.Sprintf("Center: %v, Members: %v", c.center, c.members)
 }
 
-func (c *Cluster) GetCenter() Vector {
+func (c *Cluster) Center() Vector {
 	return c.center
 }
 
-func (c *Cluster) GetMembers() []Vector {
+func (c *Cluster) Members() []Vector {
 	return c.members
 }
 

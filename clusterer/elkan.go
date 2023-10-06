@@ -136,7 +136,7 @@ func (el *KmeansElkan) calculateCentroidDistances(clusters containers.Clusters, 
 			func(r, c int) {
 				eg.Go(func() error {
 					var err error
-					centroidDistances[r][c], err = el.distFn(clusters[r].GetCenter(), clusters[c].GetCenter())
+					centroidDistances[r][c], err = el.distFn(clusters[r].Center(), clusters[c].Center())
 					if err != nil {
 						return err
 					}
@@ -195,7 +195,7 @@ func (el *KmeansElkan) assignData(centroidDistances [][]float64,
 
 				//step3a BoundsUpdate
 				if el.r[x] {
-					distance, err := el.distFn(vectors[x], clusters[meanIndex].GetCenter())
+					distance, err := el.distFn(vectors[x], clusters[meanIndex].Center())
 					if err != nil {
 						return 0, err
 					}
@@ -207,7 +207,7 @@ func (el *KmeansElkan) assignData(centroidDistances [][]float64,
 				//step3b Update
 				if el.upperBounds[x] > el.lowerBounds[x][c] ||
 					el.upperBounds[x] > centroidDistances[meanIndex][c]*0.5 {
-					newDistance, _ := el.distFn(vectors[x], clusters[c].GetCenter())
+					newDistance, _ := el.distFn(vectors[x], clusters[c].Center())
 					el.lowerBounds[x][c] = newDistance
 					if newDistance < el.upperBounds[x] {
 						meanIndex = c

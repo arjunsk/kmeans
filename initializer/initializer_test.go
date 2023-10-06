@@ -29,8 +29,8 @@ func TestInitCentroids_random(t *testing.T) {
 
 			oneMatched := false
 			for _, want := range tt.wantPossibilities {
-				if reflect.DeepEqual(got[0].GetCenter(), want[0].GetCenter()) && reflect.DeepEqual(got[1].GetCenter(), want[1].GetCenter()) ||
-					reflect.DeepEqual(got[0].GetCenter(), want[1].GetCenter()) && reflect.DeepEqual(got[1].GetCenter(), want[0].GetCenter()) {
+				if reflect.DeepEqual(got[0].Center(), want[0].Center()) && reflect.DeepEqual(got[1].Center(), want[1].Center()) ||
+					reflect.DeepEqual(got[0].Center(), want[1].Center()) && reflect.DeepEqual(got[1].Center(), want[0].Center()) {
 					oneMatched = true
 					break
 				}
@@ -73,8 +73,8 @@ func TestInitCentroids_kmeansPlusPlus(t *testing.T) {
 
 			oneMatched := false
 			for _, want := range tt.wantPossibilities {
-				if reflect.DeepEqual(got[0].GetCenter(), want[0].GetCenter()) && reflect.DeepEqual(got[1].GetCenter(), want[1].GetCenter()) ||
-					reflect.DeepEqual(got[0].GetCenter(), want[1].GetCenter()) && reflect.DeepEqual(got[1].GetCenter(), want[0].GetCenter()) {
+				if reflect.DeepEqual(got[0].Center(), want[0].Center()) && reflect.DeepEqual(got[1].Center(), want[1].Center()) ||
+					reflect.DeepEqual(got[0].Center(), want[1].Center()) && reflect.DeepEqual(got[1].Center(), want[0].Center()) {
 					oneMatched = true
 					break
 				}

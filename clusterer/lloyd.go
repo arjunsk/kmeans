@@ -77,12 +77,12 @@ func (ll Lloyd) kmeans(clusters containers.Clusters) (err error) {
 
 		// 3.b Update the cluster centroids for Empty clusters
 		for clusterId := 0; clusterId < len(clusters); clusterId++ {
-			if len(clusters[clusterId].GetMembers()) == 0 {
+			if len(clusters[clusterId].Members()) == 0 {
 				//vecIdx represents an index of a vector from a "cluster with more than one member"
 				var vecIdx int
 				for {
 					vecIdx = rand.Intn(len(ll.vectors))
-					if len(clusters[assignments[vecIdx]].GetMembers()) > 1 {
+					if len(clusters[assignments[vecIdx]].Members()) > 1 {
 						break
 					}
 				}
