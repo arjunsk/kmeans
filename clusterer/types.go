@@ -12,6 +12,8 @@ type Clusterer interface {
 	// NOTE: We will not support adding clusterCnt as argument ie Cluster(clusterCnt).
 	// This would require a factory pattern to create states
 	// (assignments, lowerBounds, upperBounds, r) etc. for each call.
+	// NOTE: it is good that we return concretion of `Clusters`. The client can
+	// decide on the abstraction on `Clusters` and decide which functions to expose.
 	Cluster() (containers.Clusters, error)
 }
 
