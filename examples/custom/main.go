@@ -18,8 +18,7 @@ func main() {
 		{300, 400, 200, 110},
 	}
 
-	builder := kmeans.NewClusterBuilder(kmeans.ELKAN, vectors, 2)
-	builder.Initializer(initializer.NewKmeansPlusPlusInitializer(containers.EuclideanDistance))
+	clusterer, err := kmeans.NewCluster(kmeans.ELKAN, vectors, 2, kmeans.WithInitializer(initializer.NewKmeansPlusPlusInitializer(containers.EuclideanDistance)))
 	/*
 		To define custom initializer, you can use this syntax:
 
@@ -30,10 +29,9 @@ func main() {
 		}
 
 		var init initializer.Initializer = &Custom{}
-		builder.Initializer(init)
+		kmeans.NewCluster(kmeans.ELKAN, vectors, 2, kmeans.WithInitializer(init) )
 	*/
 
-	clusterer, err := builder.Build()
 	if err != nil {
 		panic(err)
 	}
