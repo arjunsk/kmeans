@@ -82,16 +82,24 @@ func (el *KmeansElkan) kmeansElkan(clusters containers.Clusters) (err error) {
 		el.reset(clusters)
 		clusters.Reset()
 
+		// step 1.a
+		// For all centers c and c', compute d(c, c').
 		centroidSelfDistances := el.calculateCentroidDistances(clusters, el.clusterCnt)
+
+		// step 1.b
+		//  For all centers c, compute s(c)=0.5 min {d(c, c') | c'!= c}.
 		sc := el.computeSc(centroidSelfDistances, el.clusterCnt)
 
-		// step 3
+		// step 2 and 3
 		movement, err = el.assignData(centroidSelfDistances, sc, clusters, el.vectors, i)
 		if err != nil {
 			return err
 		}
 
-		// step 4 and 5
+		// step 4
+		// For each center c, let m(c) be the mean of the points assigned to c.
+		// step 7
+		// Replace each center $c$ by $m(c)$.
 		moveDistances, err := clusters.RecenterWithDeltaDistance(el.distFn)
 		if err != nil {
 			return err
@@ -166,20 +174,28 @@ func (el *KmeansElkan) assignData(centroidDistances [][]float64,
 
 	for x := range vectors {
 
-		// c(x)
+		// c(x) in the paper
 		meanIndex := el.assignments[x]
 
+		// step 2.
+		// Identify all points x such that u(x) <= s(c(x)).
 		if el.upperBounds[x] <= sc[meanIndex] {
 			continue
 		}
 
+		// step 3.
+		// For all remaining points x and centers c such that
+		// (i) c != c(x) and
+		// (ii) u(x)>l(x, c) and
+		// (iii) u(x)> 0.5 d(c(x), c):
 		for c := 0; c < k; c++ {
 
 			if c != meanIndex &&
 				el.upperBounds[x] > el.lowerBounds[x][c] &&
 				el.upperBounds[x] > centroidDistances[meanIndex][c]*0.5 {
 
-				//step3a BoundsUpdate
+				//step 3.a
+				// If r(x) then compute d(x, c(x)) and assign r(x)= false. Otherwise, d(x, c(x))=u(x).
 				if el.r[x] {
 					distance, err := el.distFn(vectors[x], clusters[meanIndex].Center())
 					if err != nil {
@@ -190,7 +206,11 @@ func (el *KmeansElkan) assignData(centroidDistances [][]float64,
 					el.r[x] = false
 				}
 
-				//step3b Update
+				//step 3.b
+				// If d(x, c(x))>l(x, c)
+				// or d(x, c(x))> 0.5 d(c(x), c) then
+				// Compute d(x, c)
+				// If d(x, c)<d(x, c(x)) then assign c(x)=c.
 				if el.upperBounds[x] > el.lowerBounds[x][c] ||
 					el.upperBounds[x] > centroidDistances[meanIndex][c]*0.5 {
 					newDistance, _ := el.distFn(vectors[x], clusters[c].Center())
@@ -221,8 +241,15 @@ func (el *KmeansElkan) updateBounds(moveDistances []float64, data [][]float64) {
 
 	for x := range data {
 		for c := 0; c < k; c++ {
+			//Step 5
+			//For each point x and center c, assign
+			// l(x, c)= max{ l(x, c)-d(c, m(c)), 0 }
 			el.lowerBounds[x][c] = math.Max(el.lowerBounds[x][c]-moveDistances[c], 0)
 		}
+		// Step 6
+		// For each point x, assign
+		// u(x)=u(x)+d(m(c(x)), c(x))
+		// r(x)= true
 		el.upperBounds[x] += moveDistances[el.assignments[x]]
 		el.r[x] = true
 	}
