@@ -1,4 +1,5 @@
 # Go Kmeans
+[![Go Report Card](https://goreportcard.com/badge/github.com/arjunsk/kmeans)](https://goreportcard.com/report/github.com/arjunsk/kmeans)
 
 This is a simple implementation of the [Elkan's Kmeans](https://cdn.aaai.org/ICML/2003/ICML03-022.pdf) 
 algorithm in Go. The library also contains [Kmeans++](https://en.wikipedia.org/wiki/K-means%2B%2B),
