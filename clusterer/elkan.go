@@ -60,20 +60,6 @@ func NewKmeansElkan(vectors [][]float64, clusterCnt int,
 	return &el, nil
 }
 
-func newKmeansElkanWithOptions(
-	deltaThreshold float64,
-	iterationThreshold int,
-	distFn containers.DistanceFunction,
-	init initializer.Initializer) (KmeansElkan, error) {
-
-	return KmeansElkan{
-		deltaThreshold:     deltaThreshold,
-		iterationThreshold: iterationThreshold,
-		distFn:             distFn,
-		initializer:        init,
-	}, nil
-}
-
 func (el *KmeansElkan) Cluster() (containers.Clusters, error) {
 
 	clusters, err := el.initializer.InitCentroids(el.vectors, el.clusterCnt)
