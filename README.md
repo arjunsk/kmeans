@@ -1,7 +1,9 @@
 # Go Kmeans
 
 This is a simple implementation of the [Elkan's Kmeans](https://cdn.aaai.org/ICML/2003/ICML03-022.pdf) 
-algorithm in Go.
+algorithm in Go. The library also contains [Kmeans++](https://en.wikipedia.org/wiki/K-means%2B%2B),
+[Lloyd's kmeans](https://en.wikipedia.org/wiki/K-means_clustering#Standard_algorithm_(naive_k-means)) and 
+[Simple Random Sampling](https://en.wikipedia.org/wiki/Simple_random_sample) algorithms.
 
 ### Usage
 
