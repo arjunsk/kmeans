@@ -5,6 +5,12 @@ algorithm in Go. The library also contains [Kmeans++](https://en.wikipedia.org/w
 [Lloyd's kmeans](https://en.wikipedia.org/wiki/K-means_clustering#Standard_algorithm_(naive_k-means)) and 
 [Simple Random Sampling](https://en.wikipedia.org/wiki/Simple_random_sample) algorithms.
 
+### Installing
+
+```sh
+$ go get github.com/arjunsk/kmeans
+```
+
 ### Usage
 
 ```go
