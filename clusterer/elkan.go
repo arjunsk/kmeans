@@ -15,14 +15,14 @@ type KmeansElkan struct {
 	distFn      containers.DistanceFunction
 	initializer initializer.Initializer
 
-	assignments []int
-	lowerBounds [][]float64
-	upperBounds []float64
-	r           []bool
+	assignments []int       // maps vector index to cluster index
+	lowerBounds [][]float64 // distances for vector and all clusters centroids
+	upperBounds []float64   // distance between each point and its assigned cluster centroid
+	r           []bool      // indicates that upper bound needs to be recalculated
 
 	// local state
-	vectors    [][]float64
-	clusterCnt int
+	vectors    [][]float64 // input vectors
+	clusterCnt int         // number of clusters ie k
 }
 
 var _ Clusterer = new(KmeansElkan)
@@ -50,9 +50,9 @@ func NewKmeansElkan(vectors [][]float64, clusterCnt int,
 		r:                  make([]bool, n),
 		assignments:        make([]int, n),
 		upperBounds:        make([]float64, n),
-		lowerBounds:        make([][]float64, n),
 	}
 
+	el.lowerBounds = make([][]float64, n)
 	for i := range el.lowerBounds {
 		el.lowerBounds[i] = make([]float64, clusterCnt)
 	}
