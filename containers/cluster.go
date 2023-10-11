@@ -31,7 +31,6 @@ func (c *Cluster) Recenter() {
 	newCenter.Mul(1 / float64(memberCnt))
 
 	c.center = newCenter
-	return
 }
 
 func (c *Cluster) RecenterWithMovedDistance(distFn DistanceFunction) (moveDistances float64, err error) {

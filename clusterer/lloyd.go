@@ -62,7 +62,7 @@ func (ll Lloyd) Cluster() (containers.Clusters, error) {
 func (ll Lloyd) kmeans(clusters containers.Clusters) (err error) {
 
 	assignments := make([]int, len(ll.vectors))
-	movement := 1
+	var movement int
 
 	for i := 0; ; i++ {
 		//1. Reset the state
