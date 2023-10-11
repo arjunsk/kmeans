@@ -76,7 +76,7 @@ func (el *KmeansElkan) Cluster() (containers.Clusters, error) {
 }
 
 // kmeansElkan Complexity := closer to O(n); n = number of vectors
-func (el *KmeansElkan) kmeansElkan(clusters containers.Clusters) (err error) {
+func (el *KmeansElkan) kmeansElkan(clusters containers.Clusters) error {
 	for i := 0; ; i++ {
 		movement := 0
 		el.reset(clusters)
@@ -91,7 +91,7 @@ func (el *KmeansElkan) kmeansElkan(clusters containers.Clusters) (err error) {
 		sc := el.computeSc(centroidSelfDistances, el.clusterCnt)
 
 		// step 2 and 3
-		movement, err = el.assignData(centroidSelfDistances, sc, clusters, el.vectors, i)
+		movement, err := el.assignData(centroidSelfDistances, sc, clusters, el.vectors, i)
 		if err != nil {
 			return err
 		}
@@ -190,37 +190,42 @@ func (el *KmeansElkan) assignData(centroidDistances [][]float64,
 		// (iii) u(x)> 0.5 d(c(x), c):
 		for c := 0; c < k; c++ {
 
-			if c != meanIndex &&
-				el.upperBounds[x] > el.lowerBounds[x][c] &&
+			if c == meanIndex {
+				continue // Pruned because this cluster is already the assignment.
+			}
+
+			if el.upperBounds[x] <= el.lowerBounds[x][c] {
+				continue // Pruned by triangle inequality on lower bound.
+			}
+
+			if el.upperBounds[x] <= centroidDistances[meanIndex][c]*0.5 {
+				continue // Pruned by triangle inequality on cluster distances.
+			}
+
+			//step 3.a
+			// If r(x) then compute d(x, c(x)) and assign r(x)= false. Otherwise, d(x, c(x))=u(x).
+			if el.r[x] {
+				distance, err := el.distFn(vectors[x], clusters[meanIndex].Center())
+				if err != nil {
+					return 0, err
+				}
+				el.upperBounds[x] = distance
+				el.lowerBounds[x][meanIndex] = distance
+				el.r[x] = false
+			}
+
+			//step 3.b
+			// If d(x, c(x))>l(x, c) or d(x, c(x))> 0.5 d(c(x), c) then
+			// Compute d(x, c)
+			// If d(x, c)<d(x, c(x)) then assign c(x)=c.
+			if el.upperBounds[x] > el.lowerBounds[x][c] ||
 				el.upperBounds[x] > centroidDistances[meanIndex][c]*0.5 {
-
-				//step 3.a
-				// If r(x) then compute d(x, c(x)) and assign r(x)= false. Otherwise, d(x, c(x))=u(x).
-				if el.r[x] {
-					distance, err := el.distFn(vectors[x], clusters[meanIndex].Center())
-					if err != nil {
-						return 0, err
-					}
-					el.upperBounds[x] = distance
-					el.lowerBounds[x][meanIndex] = distance
-					el.r[x] = false
+				newDistance, _ := el.distFn(vectors[x], clusters[c].Center())
+				el.lowerBounds[x][c] = newDistance
+				if newDistance < el.upperBounds[x] {
+					meanIndex = c
+					el.upperBounds[x] = newDistance
 				}
-
-				//step 3.b
-				// If d(x, c(x))>l(x, c)
-				// or d(x, c(x))> 0.5 d(c(x), c) then
-				// Compute d(x, c)
-				// If d(x, c)<d(x, c(x)) then assign c(x)=c.
-				if el.upperBounds[x] > el.lowerBounds[x][c] ||
-					el.upperBounds[x] > centroidDistances[meanIndex][c]*0.5 {
-					newDistance, _ := el.distFn(vectors[x], clusters[c].Center())
-					el.lowerBounds[x][c] = newDistance
-					if newDistance < el.upperBounds[x] {
-						meanIndex = c
-						el.upperBounds[x] = newDistance
-					}
-				}
-
 			}
 
 		}
