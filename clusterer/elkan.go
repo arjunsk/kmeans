@@ -8,6 +8,7 @@ import (
 )
 
 // KmeansElkan Ref Paper: https://cdn.aaai.org/ICML/2003/ICML03-022.pdf
+// Slides: https://slideplayer.com/slide/9088301/
 type KmeansElkan struct {
 	deltaThreshold     float64
 	iterationThreshold int
