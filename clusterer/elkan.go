@@ -17,7 +17,7 @@ type KmeansElkan struct {
 
 	assignments []int       // maps vector index to cluster index
 	lowerBounds [][]float64 // distances for vector and all clusters centroids
-	upperBounds []float64   // distance between each point and its assigned cluster centroid
+	upperBounds []float64   // distance between each point and its assigned cluster centroid ie d(x, c(x))
 	r           []bool      // indicates that upper bound needs to be recalculated
 
 	// local state
@@ -99,7 +99,7 @@ func (el *KmeansElkan) kmeansElkan(clusters containers.Clusters) error {
 		// step 4
 		// For each center c, let m(c) be the mean of the points assigned to c.
 		// step 7
-		// Replace each center $c$ by $m(c)$.
+		// Replace each center c by m(c).
 		moveDistances, err := clusters.RecenterWithDeltaDistance(el.distFn)
 		if err != nil {
 			return err

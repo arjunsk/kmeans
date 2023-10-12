@@ -8,8 +8,8 @@ import (
 )
 
 var (
-	DefaultDeltaThreshold     = 0.01
-	DefaultIterationThreshold = 500
+	defaultDeltaThreshold     = 0.01
+	defaultIterationThreshold = 500
 )
 
 type ClustererType int
@@ -38,10 +38,10 @@ func (o *options) fillDefaults() {
 		o.distanceFn = containers.EuclideanDistance
 	}
 	if o.deltaThreshold == nil {
-		o.deltaThreshold = &DefaultDeltaThreshold
+		o.deltaThreshold = &defaultDeltaThreshold
 	}
 	if o.iterationThreshold == nil {
-		o.iterationThreshold = &DefaultIterationThreshold
+		o.iterationThreshold = &defaultIterationThreshold
 	}
 
 }

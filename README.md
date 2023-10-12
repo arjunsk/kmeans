@@ -1,5 +1,6 @@
 # Go Kmeans
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/arjunsk/kmeans/kmeans.svg)](https://pkg.go.dev/github.com/arjunsk/kmeans)
 [![Go Report Card](https://goreportcard.com/badge/github.com/arjunsk/kmeans)](https://goreportcard.com/report/github.com/arjunsk/kmeans)
 
 This is a simple implementation of the [Elkan's Kmeans](https://cdn.aaai.org/ICML/2003/ICML03-022.pdf)
