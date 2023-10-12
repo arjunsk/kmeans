@@ -33,7 +33,7 @@ func (c *Cluster) Recenter() {
 	c.center = newCenter
 }
 
-func (c *Cluster) RecenterWithMovedDistance(distFn DistanceFunction) (moveDistances float64, err error) {
+func (c *Cluster) RecenterWithMovedDistance(distFn DistanceFunction) (moveDistance float64, err error) {
 	memberCnt := len(c.members)
 	if memberCnt == 0 {
 		//return 0, errors.New("kmeans: there is no mean for an empty cluster")
@@ -47,14 +47,14 @@ func (c *Cluster) RecenterWithMovedDistance(distFn DistanceFunction) (moveDistan
 	}
 	newCenter.Mul(1 / float64(memberCnt))
 
-	moveDistances, err = distFn(c.center, newCenter)
+	moveDistance, err = distFn(c.center, newCenter)
 	if err != nil {
 		return 0, err
 	}
 
 	c.center = newCenter
 
-	return moveDistances, nil
+	return moveDistance, nil
 }
 
 // SSE returns the sum of squared errors of the cluster
