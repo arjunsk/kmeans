@@ -15,9 +15,9 @@ pkg: github.com/arjunsk/kmeans/clusterer
 cpu: Apple M2 Pro
 rows: 5_000
 dims: 1024
-Benchmark_kmeans/KMEANS-10         	       1	32952745208 ns/op
+Benchmark_kmeans/KMEANS-10         	       1	44640829958 ns/op
 Benchmark_kmeans/KMEANS++-10       	       1	89310750250 ns/op
-Benchmark_kmeans/ELKAN-10          	       1	21269951792 ns/op
+Benchmark_kmeans/ELKAN-10          	       1	24660727625 ns/op
 */
 func Benchmark_kmeans(b *testing.B) {
 	rowCnt := 5_000
