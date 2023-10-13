@@ -93,6 +93,12 @@ when the number of vectors is large, it is recommended to use sub-sampling.
 >
 >The parameters {min,max}_points_per_centroids (39 and 256 by default) belong to the ClusteringParameters structure.
 
+#### What should be the ideal K?
+Based on the recommendations from [PGVector](https://github.com/pgvector/pgvector/tree/master#ivfflat) IVF INDEX, 
+the idea K should 
+
+> Choose an appropriate number of K - a good place to start is rows / 1000 for up to 1M rows and 
+> sqrt(rows) for over 1M rows
 
 
 
