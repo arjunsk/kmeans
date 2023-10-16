@@ -99,8 +99,11 @@ when the number of vectors is large, it is recommended to use sub-sampling.
 >  Number of partitions (ie K) cannot exceed half the number of records.
 > 
 >  Returns total number of records if it is < 1000. Otherwise, returns 1% of the total number
->  of records or twice the number of partitions whichever is larger. Never returns a
+>  of records or 2x number of partitions whichever is larger. Never returns a
 >  number > Integer.MAX_VALUE.
+
+The 2x could be based on the dimension of vector (here is geo-coordinates). For example, if the vector is 
+1000 dimension, then the sample size could be Max( 1% * total vectors, 1000 x k).
 
 - Based on FAISS, the sample size could be `max_points_per_centroid * k` if `n > max_points_per_centroid * k`.
 
