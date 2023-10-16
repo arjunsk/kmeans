@@ -93,6 +93,19 @@ when the number of vectors is large, it is recommended to use sub-sampling.
 >
 >The parameters {min,max}_points_per_centroids (39 and 256 by default) belong to the ClusteringParameters structure.
 
+#### What could be your sample size?
+- [Apache Sedona](https://github.com/apache/sedona/blob/06e7d679ff979a4f052e0afe5df0b303bf8d70fb/spark/common/src/main/java/org/apache/sedona/core/utils/RDDSampleUtils.java#L36C10-L36C10) uses the following sampling rule.
+
+>  Number of partitions (ie K) cannot exceed half the number of records.
+> 
+>  Returns total number of records if it is < 1000. Otherwise, returns 1% of the total number
+>  of records or twice the number of partitions whichever is larger. Never returns a
+>  number > Integer.MAX_VALUE.
+
+- Based on FAISS, the sample size could be `max_points_per_centroid * k` if `n > max_points_per_centroid * k`.
+
+
+
 #### What should be the ideal K?
 Based on the recommendations from [PGVector](https://github.com/pgvector/pgvector/tree/master#ivfflat) IVF INDEX, 
 the idea K should 
