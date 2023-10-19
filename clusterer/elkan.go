@@ -79,6 +79,7 @@ func (el *KmeansElkan) Cluster() (containers.Clusters, error) {
 // c. These updates take O(nk) time, so the complexity of the algorithm remains at least O(nke), even
 // though the number of distance calculations is roughly O(n) only.
 // Ref:https://www.cse.iitd.ac.in/~rjaiswal/2015/col870/Project/Nipun.pdf
+// This variant needs O(n*k) additional memory to store bounds.
 func (el *KmeansElkan) kmeansElkan(clusters containers.Clusters) error {
 	for i := 0; ; i++ {
 		movement := 0
@@ -207,7 +208,7 @@ func (el *KmeansElkan) assignData(centroidDistances [][]float64,
 				continue // Pruned by triangle inequality on cluster distances.
 			}
 
-			//step 3.a
+			//step 3.a - Bounds update
 			// If r(x) then compute d(x, c(x)) and assign r(x)= false. Otherwise, d(x, c(x))=u(x).
 			if r {
 				distance, err := el.distFn(vectors[x], clusters[meanIndex].Center())
@@ -219,7 +220,7 @@ func (el *KmeansElkan) assignData(centroidDistances [][]float64,
 				r = false
 			}
 
-			//step 3.b
+			//step 3.b - Update
 			// If d(x, c(x))>l(x, c) or d(x, c(x))> 0.5 d(c(x), c) then
 			// Compute d(x, c)
 			// If d(x, c)<d(x, c(x)) then assign c(x)=c.
@@ -234,13 +235,14 @@ func (el *KmeansElkan) assignData(centroidDistances [][]float64,
 			}
 
 		}
+
+		// Update Assigment/Membership & use this info to later update Mean Centroid
 		if meanIndex != el.assignments[x] {
 			el.assignments[x] = meanIndex
 			moves++
 		} else if iterationCount == 0 {
 			moves++
 		}
-
 		clusters[meanIndex].AddMember(vectors[x])
 	}
 	return moves, nil
