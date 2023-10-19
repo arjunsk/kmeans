@@ -63,14 +63,14 @@ func (kpp *KmeansPlusPlus) InitCentroids(vectors [][]float64, clusterCnt int) (c
 		// Ref: https://en.wikipedia.org/wiki/K-means%2B%2B#Improved_initialization_algorithm
 		// Ref: https://stats.stackexchange.com/a/272133/397621
 		target := rand.Float64() * sum
-		nextClusterCenterIdx := 0
-		for sum = distances[0]; sum < target; sum += distances[nextClusterCenterIdx] {
-			nextClusterCenterIdx++
+		idx := 0
+		for currSum := distances[0]; currSum < target; currSum += distances[idx] {
+			idx++
 		}
 
 		// Select a cluster center based on a probability distribution where vectors
 		//	with larger distances have a higher chance of being chosen as the center.
-		clusters[i] = containers.NewCluster(vectors[nextClusterCenterIdx])
+		clusters[i] = containers.NewCluster(vectors[idx])
 
 	}
 	return clusters, nil
