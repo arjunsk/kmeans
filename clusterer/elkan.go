@@ -19,7 +19,6 @@ type KmeansElkan struct {
 	assignments []int       // maps vector index to cluster index
 	lowerBounds [][]float64 // distances for vector and all clusters centroids
 	upperBounds []float64   // distance between each point and its assigned cluster centroid ie d(x, c(x))
-	r           []bool      // indicates that upper bound needs to be recalculated
 
 	// local state
 	vectors    [][]float64 // input vectors
@@ -48,7 +47,6 @@ func NewKmeansElkan(vectors [][]float64, clusterCnt int,
 		initializer:        init,
 		vectors:            vectors,
 		clusterCnt:         clusterCnt,
-		r:                  make([]bool, n),
 		assignments:        make([]int, n),
 		upperBounds:        make([]float64, n),
 	}
@@ -76,7 +74,11 @@ func (el *KmeansElkan) Cluster() (containers.Clusters, error) {
 	return clusters, nil
 }
 
-// kmeansElkan Complexity := closer to O(n); n = number of vectors
+// kmeansElkan
+// During each iteration of the algorithm, the lower bounds l(x, c) are updated for all points x and centers
+// c. These updates take O(nk) time, so the complexity of the algorithm remains at least O(nke), even
+// though the number of distance calculations is roughly O(n) only.
+// Ref:https://www.cse.iitd.ac.in/~rjaiswal/2015/col870/Project/Nipun.pdf
 func (el *KmeansElkan) kmeansElkan(clusters containers.Clusters) error {
 	for i := 0; ; i++ {
 		movement := 0
@@ -184,6 +186,8 @@ func (el *KmeansElkan) assignData(centroidDistances [][]float64,
 			continue
 		}
 
+		r := true //indicates that upper bound needs to be recalculated
+
 		// step 3.
 		// For all remaining points x and centers c such that
 		// (i) c != c(x) and
@@ -205,14 +209,14 @@ func (el *KmeansElkan) assignData(centroidDistances [][]float64,
 
 			//step 3.a
 			// If r(x) then compute d(x, c(x)) and assign r(x)= false. Otherwise, d(x, c(x))=u(x).
-			if el.r[x] {
+			if r {
 				distance, err := el.distFn(vectors[x], clusters[meanIndex].Center())
 				if err != nil {
 					return 0, err
 				}
 				el.upperBounds[x] = distance
 				el.lowerBounds[x][meanIndex] = distance
-				el.r[x] = false
+				r = false
 			}
 
 			//step 3.b
@@ -257,7 +261,6 @@ func (el *KmeansElkan) updateBounds(moveDistances []float64, data [][]float64) {
 		// u(x)=u(x)+d(m(c(x)), c(x))
 		// r(x)= true
 		el.upperBounds[x] += moveDistances[el.assignments[x]]
-		el.r[x] = true
 	}
 }
 

@@ -19,7 +19,8 @@ func NewKmeansPlusPlusInitializer(distFn containers.DistanceFunction) Initialize
 // InitCentroids initializes the centroids using kmeans++ algorithm
 // Ref: https://www.youtube.com/watch?v=HatwtJSsj5Q
 // Ref (animation):https://www.youtube.com/watch?v=efKGmOH4Y_A
-// Complexity: O(n*k); n = number of vectors, k = number of clusters
+// Complexity: O(k*n*k); n = number of vectors, k = number of clusters
+// Reason: For k-1 times, compute the distance of each vector to its nearest center O(nk)
 func (kpp *KmeansPlusPlus) InitCentroids(vectors [][]float64, clusterCnt int) (clusters containers.Clusters, err error) {
 	err = validateArgs(vectors, clusterCnt)
 	if err != nil {
@@ -36,6 +37,7 @@ func (kpp *KmeansPlusPlus) InitCentroids(vectors [][]float64, clusterCnt int) (c
 	randIdx := rand.Intn(len(vectors))
 	clusters[0] = containers.NewCluster(vectors[randIdx])
 
+	// O(k-1)
 	for i := 1; i < clusterCnt; i++ {
 		// NOTE: Since Nearest function is called on clusters-1, parallel handling
 		// can cause bugs, since all the clusters are not initialized.
@@ -43,8 +45,10 @@ func (kpp *KmeansPlusPlus) InitCentroids(vectors [][]float64, clusterCnt int) (c
 		sum := 0.0
 		minDistance := 0.0
 		// 2. for each data point, compute the distance to the existing centers
+		// O(n)
 		for vecIdx, vec := range vectors {
 
+			// O(k)
 			_, minDistance, err = clusters[:i].Nearest(vec, kpp.DistFn)
 			if err != nil {
 				return nil, err
