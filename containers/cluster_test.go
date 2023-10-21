@@ -167,3 +167,35 @@ func TestCluster_SSE(t *testing.T) {
 		})
 	}
 }
+
+func TestCluster_String(t *testing.T) {
+	type fields struct {
+		center  Vector
+		members []Vector
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   string
+	}{
+		{
+			name: "Test1",
+			fields: fields{
+				center:  Vector{1, 1},
+				members: []Vector{{1, 1}, {3, 3}, {3, 3}},
+			},
+			want: "center: [1 1], members: [[1 1] [3 3] [3 3]]",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			c := &Cluster{
+				center:  tt.fields.center,
+				members: tt.fields.members,
+			}
+			if got := c.String(); got != tt.want {
+				t.Errorf("String() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
