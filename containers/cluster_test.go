@@ -1,6 +1,7 @@
 package containers
 
 import (
+	"reflect"
 	"testing"
 )
 
@@ -196,6 +197,38 @@ func TestCluster_String(t *testing.T) {
 			if got := c.String(); got != tt.want {
 				t.Errorf("String() = %v, want %v", got, tt.want)
 			}
+		})
+	}
+}
+
+func TestCluster_AddMember_Members(t *testing.T) {
+
+	tests := []struct {
+		name        string
+		cluster     *Cluster
+		argMembers  []Vector
+		wantMembers []Vector
+	}{
+		{
+			name: "Test1",
+			cluster: &Cluster{
+				center:  Vector{1, 1},
+				members: []Vector{{1, 2}, {2, 3}},
+			},
+			argMembers:  []Vector{{4, 5}, {6, 7}},
+			wantMembers: []Vector{{1, 2}, {2, 3}, {4, 5}, {6, 7}},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			for _, member := range tt.argMembers {
+				tt.cluster.AddMember(member)
+			}
+
+			if !reflect.DeepEqual(tt.cluster.Members(), tt.wantMembers) {
+				t.Errorf("Members() = %v, want %v", tt.cluster.Members(), tt.wantMembers)
+			}
+
 		})
 	}
 }
