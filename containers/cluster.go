@@ -23,7 +23,7 @@ func (c *Cluster) Recenter() {
 		return
 	}
 
-	// newCenter = "Mean" of the Members
+	// newCenter = "Mean" of the members
 	newCenter := make(Vector, len(c.center))
 	for _, member := range c.members {
 		newCenter.Add(member)
@@ -40,7 +40,7 @@ func (c *Cluster) RecenterWithMovedDistance(distFn DistanceFunction) (moveDistan
 		return 0, nil
 	}
 
-	// newCenter is the "Mean" of the Members
+	// newCenter is the "Mean" of the members
 	newCenter := make(Vector, len(c.center))
 	for _, member := range c.members {
 		newCenter.Add(member)
@@ -73,7 +73,7 @@ func (c *Cluster) Reset() {
 }
 
 func (c *Cluster) String() string {
-	return fmt.Sprintf("Center: %v, Members: %v", c.center, c.members)
+	return fmt.Sprintf("center: %v, members: %v", c.center, c.members)
 }
 
 func (c *Cluster) Center() Vector {
