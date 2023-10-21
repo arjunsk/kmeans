@@ -207,3 +207,63 @@ func TestClusters_Nearest(t *testing.T) {
 		})
 	}
 }
+
+func TestClusters_String(t *testing.T) {
+	tests := []struct {
+		name string
+		c    Clusters
+		want string
+	}{
+		{
+			name: "Test1",
+			c: Clusters{
+				Cluster{
+					center:  Vector{1, 1},
+					members: []Vector{{1, 1}, {2, 2}, {3, 3}},
+				},
+				Cluster{
+					center:  Vector{2, 2},
+					members: []Vector{{1, 1}, {2, 2}, {3, 3}},
+				},
+			},
+			want: "0: center: [1 1], members: [[1 1] [2 2] [3 3]]\n1: center: [2 2], members: [[1 1] [2 2] [3 3]]\n",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.c.String(); got != tt.want {
+				t.Errorf("String() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestClusters_SSE(t *testing.T) {
+	tests := []struct {
+		name string
+		c    Clusters
+		want float64
+	}{
+		{
+			name: "Test1",
+			c: Clusters{
+				Cluster{
+					center:  Vector{1, 1},
+					members: []Vector{{1, 1}, {2, 2}, {3, 3}},
+				},
+				Cluster{
+					center:  Vector{2, 2},
+					members: []Vector{{1, 1}, {2, 2}, {3, 3}},
+				},
+			},
+			want: 14.000000000000004,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.c.SSE(); got != tt.want {
+				t.Errorf("SSE() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
