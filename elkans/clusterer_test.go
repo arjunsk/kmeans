@@ -16,8 +16,8 @@ package elkans
 
 import (
 	"github.com/arjunsk/kmeans"
-	"github.com/arjunsk/kmeans/assertx"
-	"github.com/arjunsk/kmeans/moarray"
+	"github.com/arjunsk/kmeans/utils/assertx"
+	"github.com/arjunsk/kmeans/utils/moarray"
 	"reflect"
 	"testing"
 )

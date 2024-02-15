@@ -15,7 +15,7 @@
 package moarray
 
 import (
-	"github.com/arjunsk/kmeans/moerr"
+	"github.com/arjunsk/kmeans/utils/moerr"
 	"golang.org/x/exp/constraints"
 	"gonum.org/v1/gonum/mat"
 )

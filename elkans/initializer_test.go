@@ -15,7 +15,7 @@
 package elkans
 
 import (
-	"github.com/arjunsk/kmeans/moarray"
+	"github.com/arjunsk/kmeans/utils/moarray"
 	"reflect"
 	"testing"
 )

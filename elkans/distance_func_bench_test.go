@@ -15,7 +15,7 @@
 package elkans
 
 import (
-	"github.com/arjunsk/kmeans/moarray"
+	moarray2 "github.com/arjunsk/kmeans/utils/moarray"
 	"gonum.org/v1/gonum/mat"
 	"math/rand"
 	"testing"
@@ -43,7 +43,7 @@ func Benchmark_L2Distance(b *testing.B) {
 		b.ResetTimer()
 
 		for i := 0; i < b.N; i++ {
-			_, _ = moarray.NormalizeL2[float64](v1[i])
+			_, _ = moarray2.NormalizeL2[float64](v1[i])
 		}
 	})
 
@@ -52,8 +52,8 @@ func Benchmark_L2Distance(b *testing.B) {
 		b.ResetTimer()
 
 		for i := 0; i < b.N; i++ {
-			v21, _ := moarray.NormalizeL2[float64](v2[i])
-			_ = L2Distance(v1[i], moarray.ToGonumVector(v21))
+			v21, _ := moarray2.NormalizeL2[float64](v2[i])
+			_ = L2Distance(v1[i], moarray2.ToGonumVector(v21))
 		}
 	})
 

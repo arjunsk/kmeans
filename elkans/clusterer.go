@@ -16,8 +16,8 @@ package elkans
 
 import (
 	"github.com/arjunsk/kmeans"
-	"github.com/arjunsk/kmeans/moarray"
-	"github.com/arjunsk/kmeans/moerr"
+	moarray2 "github.com/arjunsk/kmeans/utils/moarray"
+	"github.com/arjunsk/kmeans/utils/moerr"
 	"gonum.org/v1/gonum/mat"
 	"math"
 	"math/rand"
@@ -87,7 +87,7 @@ func NewKMeans(vectors [][]float64, clusterCnt,
 		return nil, err
 	}
 
-	gonumVectors, err := moarray.ToGonumVectors[float64](vectors...)
+	gonumVectors, err := moarray2.ToGonumVectors[float64](vectors...)
 	if err != nil {
 		return nil, err
 	}
@@ -153,11 +153,11 @@ func (km *ElkanClusterer) InitCentroids() error {
 // Cluster returns the final centroids and the error if any.
 func (km *ElkanClusterer) Cluster() ([][]float64, error) {
 	if km.normalize {
-		moarray.NormalizeGonumVectors(km.vectorList)
+		moarray2.NormalizeGonumVectors(km.vectorList)
 	}
 
 	if km.vectorCnt == km.clusterCnt {
-		return moarray.ToMoArrays[float64](km.vectorList), nil
+		return moarray2.ToMoArrays[float64](km.vectorList), nil
 	}
 
 	err := km.InitCentroids() // step 0.1
@@ -172,7 +172,7 @@ func (km *ElkanClusterer) Cluster() ([][]float64, error) {
 		return nil, err
 	}
 
-	return moarray.ToMoArrays[float64](res), nil
+	return moarray2.ToMoArrays[float64](res), nil
 }
 
 func (km *ElkanClusterer) elkansCluster() ([]*mat.VecDense, error) {
@@ -384,7 +384,7 @@ func (km *ElkanClusterer) recalculateCentroids() []*mat.VecDense {
 
 			// normalize the random vector
 			if km.normalize {
-				moarray.NormalizeGonumVector(newCentroids[c])
+				moarray2.NormalizeGonumVector(newCentroids[c])
 			}
 		} else {
 			// find the mean of the cluster members
